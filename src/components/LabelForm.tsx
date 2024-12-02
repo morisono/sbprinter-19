@@ -91,7 +91,7 @@ export const LabelForm = () => {
 
   return (
     <div className="min-h-screen p-4 max-w-4xl mx-auto">
-      <Card className="mb-8 bg-white">
+      <Card className="mb-8 bg-white shadow-sm">
         <CardHeader>
           {/* Removed CardTitle */}
         </CardHeader>

@@ -137,14 +137,19 @@ export const LabelForm = () => {
             <div className="flex flex-col items-center justify-center">
               <div className="label-preview bg-white border-2 border-black border-dotted rounded-lg p-4 flex flex-col items-center justify-center space-y-2">
                 <div className="font-bold text-lg">SMILEBAR</div>
-                <div className="text-base font-semibold">
-                  {currentPreview} of {totalAligners || "?"}
-                </div>
-                <div className="text-sm">
+                <div className="text-base leading-tight">
                   {startDate ? format(
                     getChangeDate(startDate, changeFrequency, currentPreview),
-                    "MMM d, yyyy"
+                    "MMM d"
                   ) : "Select date"}
+                  <br />
+                  {startDate ? format(
+                    getChangeDate(startDate, changeFrequency, currentPreview),
+                    "yyyy"
+                  ) : ""}
+                </div>
+                <div className="text-xs text-gray-600">
+                  {currentPreview} of {totalAligners || "?"}
                 </div>
               </div>
               

@@ -150,7 +150,7 @@ export const LabelForm = () => {
                     ) : ""}
                   </div>
                 </div>
-                <div className="text-xs text-gray-600">
+                <div className="text-sm text-gray-600">
                   {currentPreview} of {totalAligners || "?"}
                 </div>
               </div>

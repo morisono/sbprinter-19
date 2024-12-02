@@ -4,13 +4,15 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { format, addWeeks, addMonths } from "date-fns";
+import { format, addWeeks } from "date-fns";
+import { useToast } from "@/components/ui/use-toast";
 
 export const LabelForm = () => {
   const [totalAligners, setTotalAligners] = useState("");
   const [startDate, setStartDate] = useState("");
   const [changeFrequency, setChangeFrequency] = useState("weekly");
   const [currentPreview, setCurrentPreview] = useState(1);
+  const { toast } = useToast();
 
   const getChangeDate = (start: Date, frequency: string, alignerNumber: number) => {
     const weeks = frequency === "weekly" ? alignerNumber - 1 : 
@@ -20,9 +22,69 @@ export const LabelForm = () => {
     return addWeeks(startOfDay, weeks);
   };
 
-  const handlePrint = () => {
-    // In a real implementation, this would connect to the Zebra printer
-    console.log("Printing labels...");
+  const generateZplForLabel = (alignerNum: number, totalAligners: string, date: Date) => {
+    // ZPL code for 1.25" x 1.25" label
+    return `^XA
+^CF0,30
+^FO50,50^FDSMILEBAR^FS
+^CF0,25
+^FO50,90^FD${alignerNum} of ${totalAligners}^FS
+^CF0,20
+^FO50,130^FD${format(date, "MMM d, yyyy")}^FS
+^XZ`;
+  };
+
+  const handlePrint = async () => {
+    try {
+      // @ts-ignore
+      const zebraBrowserPrintInterface = window.BrowserPrint;
+      
+      if (!zebraBrowserPrintInterface) {
+        toast({
+          variant: "destructive",
+          title: "Zebra Browser Print not found",
+          description: "Please install Zebra Browser Print and refresh the page",
+        });
+        return;
+      }
+
+      zebraBrowserPrintInterface.getDefaultPrinter((printer: any) => {
+        if (printer) {
+          const totalLabels = parseInt(totalAligners);
+          for (let i = 1; i <= totalLabels; i++) {
+            const changeDate = getChangeDate(new Date(startDate), changeFrequency, i);
+            const zpl = generateZplForLabel(i, totalAligners, changeDate);
+            
+            printer.send(zpl, (response: any) => {
+              if (response.error) {
+                toast({
+                  variant: "destructive",
+                  title: "Print Error",
+                  description: `Error printing label ${i}: ${response.error}`,
+                });
+              }
+            });
+          }
+          
+          toast({
+            title: "Print Success",
+            description: `Sent ${totalLabels} labels to printer`,
+          });
+        } else {
+          toast({
+            variant: "destructive",
+            title: "No printer found",
+            description: "Please connect a Zebra printer and try again",
+          });
+        }
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Print Error",
+        description: "Failed to connect to printer",
+      });
+    }
   };
 
   return (

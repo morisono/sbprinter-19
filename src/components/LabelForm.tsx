@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { format, addWeeks } from "date-fns";
+import { format, addWeeks, parseISO } from "date-fns";
 import { useToast } from "@/components/ui/use-toast";
 
 export const LabelForm = () => {
@@ -17,11 +17,12 @@ export const LabelForm = () => {
   const [currentPreview, setCurrentPreview] = useState(1);
   const { toast } = useToast();
 
-  const getChangeDate = (start: Date, frequency: string, alignerNumber: number) => {
+  const getChangeDate = (start: Date | string, frequency: string, alignerNumber: number) => {
+    const startDate = typeof start === 'string' ? parseISO(start) : start;
     const weeks = frequency === "weekly" ? alignerNumber - 1 : 
                  frequency === "biweekly" ? (alignerNumber - 1) * 2 : 
                  (alignerNumber - 1) * 4;
-    return addWeeks(start, weeks);
+    return addWeeks(startDate, weeks);
   };
 
   const generateZplForLabel = (alignerNum: number, totalAligners: string, date: Date) => {
@@ -140,7 +141,7 @@ export const LabelForm = () => {
                 </div>
                 <div className="text-xs">
                   {startDate ? format(
-                    getChangeDate(new Date(startDate), changeFrequency, currentPreview),
+                    getChangeDate(startDate, changeFrequency, currentPreview),
                     "MMM d, yyyy"
                   ) : "Select date"}
                 </div>

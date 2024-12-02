@@ -93,7 +93,6 @@ export const LabelForm = () => {
     <div className="min-h-screen p-4 max-w-4xl mx-auto">
       <Card className="mb-8 bg-background shadow-sm border border-black">
         <CardHeader>
-          {/* Removed CardTitle */}
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -137,16 +136,19 @@ export const LabelForm = () => {
             <div className="flex flex-col items-center justify-center">
               <div className="label-preview bg-white border-2 border-black border-dotted rounded-lg p-4 flex flex-col items-center justify-center space-y-2">
                 <div className="font-bold text-lg">SMILEBAR</div>
-                <div className="text-base leading-tight">
-                  {startDate ? format(
-                    getChangeDate(startDate, changeFrequency, currentPreview),
-                    "MMM d"
-                  ) : "Select date"}
-                  <br />
-                  {startDate ? format(
-                    getChangeDate(startDate, changeFrequency, currentPreview),
-                    "yyyy"
-                  ) : ""}
+                <div className="text-base leading-tight text-center">
+                  <div className="font-bold">
+                    {startDate ? format(
+                      getChangeDate(startDate, changeFrequency, currentPreview),
+                      "MMM d"
+                    ) : "Select date"}
+                  </div>
+                  <div>
+                    {startDate ? format(
+                      getChangeDate(startDate, changeFrequency, currentPreview),
+                      "yyyy"
+                    ) : ""}
+                  </div>
                 </div>
                 <div className="text-xs text-gray-600">
                   {currentPreview} of {totalAligners || "?"}

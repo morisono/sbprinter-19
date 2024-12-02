@@ -90,8 +90,8 @@ export const LabelForm = () => {
   };
 
   return (
-    <div className="min-h-screen p-4 max-w-4xl mx-auto">
-      <Card className="mb-8 bg-background shadow-sm border border-black">
+    <div className="min-h-screen p-4 max-w-4xl mx-auto flex items-center justify-center">
+      <Card className="mb-8 bg-background shadow-sm border border-black w-full">
         <CardHeader>
         </CardHeader>
         <CardContent className="space-y-6">

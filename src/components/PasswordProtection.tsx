@@ -15,7 +15,7 @@ export const PasswordProtection = ({ onAuthenticated }: PasswordProtectionProps)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === "SmilebarPrint") {
+    if (password === "Smile") {
       onAuthenticated();
     } else {
       toast({

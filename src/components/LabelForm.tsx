@@ -140,7 +140,7 @@ export const LabelForm = () => {
                 <div className="text-base font-semibold">
                   {currentPreview} of {totalAligners || "?"}
                 </div>
-                <div className="text-sm">
+                <div className="text-xs">
                   {startDate ? format(
                     getChangeDate(startDate, changeFrequency, currentPreview),
                     "MMM d, yyyy"

@@ -34,17 +34,17 @@ export const PasswordProtection = ({ onAuthenticated }: PasswordProtectionProps)
           {/* Removed CardTitle with "Smilebar Printer" text */}
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="flex gap-2 items-center">
             <Input
               type="password"
               placeholder="Enter password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="text-lg border-black bg-[#FFE4E1]"
+              className="text-lg border-black bg-[#FFE4E1] flex-1"
             />
             <Button 
               type="submit" 
-              className="w-full border-black bg-black text-white hover:bg-gray-800"
+              className="border-black bg-black text-white hover:bg-gray-800"
             >
               <ArrowRight className="h-6 w-6" />
             </Button>

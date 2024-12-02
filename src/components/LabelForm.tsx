@@ -8,8 +8,11 @@ import { format, addWeeks } from "date-fns";
 import { useToast } from "@/components/ui/use-toast";
 
 export const LabelForm = () => {
-  const [totalAligners, setTotalAligners] = useState("");
-  const [startDate, setStartDate] = useState("");
+  const today = new Date();
+  const formattedToday = format(today, "yyyy-MM-dd");
+  
+  const [totalAligners, setTotalAligners] = useState("12");
+  const [startDate, setStartDate] = useState(formattedToday);
   const [changeFrequency, setChangeFrequency] = useState("weekly");
   const [currentPreview, setCurrentPreview] = useState(1);
   const { toast } = useToast();
@@ -18,8 +21,7 @@ export const LabelForm = () => {
     const weeks = frequency === "weekly" ? alignerNumber - 1 : 
                  frequency === "biweekly" ? (alignerNumber - 1) * 2 : 
                  (alignerNumber - 1) * 4;
-    const startOfDay = new Date(start.setHours(0, 0, 0, 0));
-    return addWeeks(startOfDay, weeks);
+    return addWeeks(start, weeks);
   };
 
   const generateZplForLabel = (alignerNum: number, totalAligners: string, date: Date) => {

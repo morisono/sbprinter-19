@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { ArrowRight } from "lucide-react";
 
 interface PasswordProtectionProps {
   onAuthenticated: () => void;
@@ -45,7 +46,7 @@ export const PasswordProtection = ({ onAuthenticated }: PasswordProtectionProps)
               type="submit" 
               className="w-full border-black bg-black text-white hover:bg-gray-800"
             >
-              Access Printer
+              <ArrowRight className="h-6 w-6" />
             </Button>
           </form>
         </CardContent>

@@ -133,7 +133,7 @@ export const LabelForm = () => {
             </div>
             
             <div className="flex flex-col items-center justify-center">
-              <div className="label-preview bg-white border-2 border-gray-200 rounded-lg p-4 flex flex-col items-center justify-center space-y-2">
+              <div className="label-preview bg-background border-2 border-white border-dotted rounded-lg p-4 flex flex-col items-center justify-center space-y-2">
                 <div className="font-bold text-lg">SMILEBAR</div>
                 <div className="text-base font-semibold">
                   {currentPreview} of {totalAligners || "?"}

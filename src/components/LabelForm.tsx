@@ -106,7 +106,7 @@ export const LabelForm = () => {
                   min="1"
                   value={totalAligners}
                   onChange={(e) => setTotalAligners(e.target.value)}
-                  className="border-gray-300"
+                  className="border-gray-300 bg-white"
                 />
               </div>
               <div>
@@ -116,13 +116,13 @@ export const LabelForm = () => {
                   type="date"
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  className="border-gray-300"
+                  className="border-gray-300 bg-white"
                 />
               </div>
               <div>
                 <Label htmlFor="changeFrequency">Change Frequency</Label>
                 <Select value={changeFrequency} onValueChange={setChangeFrequency}>
-                  <SelectTrigger className="border-gray-300">
+                  <SelectTrigger className="border-gray-300 bg-white">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -153,7 +153,7 @@ export const LabelForm = () => {
                   variant="outline"
                   onClick={() => setCurrentPreview(Math.max(1, currentPreview - 1))}
                   disabled={currentPreview <= 1}
-                  className="border-gray-300"
+                  className="border-gray-300 bg-white hover:bg-gray-50"
                 >
                   Previous
                 </Button>
@@ -161,7 +161,7 @@ export const LabelForm = () => {
                   variant="outline"
                   onClick={() => setCurrentPreview(Math.min(parseInt(totalAligners) || 1, currentPreview + 1))}
                   disabled={!totalAligners || currentPreview >= parseInt(totalAligners)}
-                  className="border-gray-300"
+                  className="border-gray-300 bg-white hover:bg-gray-50"
                 >
                   Next
                 </Button>
@@ -170,7 +170,7 @@ export const LabelForm = () => {
           </div>
           
           <Button
-            className="w-full border-gray-300"
+            className="w-full border-gray-300 bg-white hover:bg-gray-50"
             onClick={handlePrint}
             disabled={!totalAligners || !startDate}
           >

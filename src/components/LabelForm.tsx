@@ -91,7 +91,7 @@ export const LabelForm = () => {
 
   return (
     <div className="min-h-screen p-4 max-w-4xl mx-auto">
-      <Card className="mb-8 bg-background shadow-sm">
+      <Card className="mb-8 bg-background shadow-sm border border-gray-300">
         <CardHeader>
           {/* Removed CardTitle */}
         </CardHeader>
@@ -106,6 +106,7 @@ export const LabelForm = () => {
                   min="1"
                   value={totalAligners}
                   onChange={(e) => setTotalAligners(e.target.value)}
+                  className="border-gray-300"
                 />
               </div>
               <div>
@@ -115,12 +116,13 @@ export const LabelForm = () => {
                   type="date"
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
+                  className="border-gray-300"
                 />
               </div>
               <div>
                 <Label htmlFor="changeFrequency">Change Frequency</Label>
                 <Select value={changeFrequency} onValueChange={setChangeFrequency}>
-                  <SelectTrigger>
+                  <SelectTrigger className="border-gray-300">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -133,7 +135,7 @@ export const LabelForm = () => {
             </div>
             
             <div className="flex flex-col items-center justify-center">
-              <div className="label-preview bg-white border-2 border-white border-dotted rounded-lg p-4 flex flex-col items-center justify-center space-y-2">
+              <div className="label-preview bg-white border-2 border-gray-300 border-dotted rounded-lg p-4 flex flex-col items-center justify-center space-y-2">
                 <div className="font-bold text-lg">SMILEBAR</div>
                 <div className="text-base font-semibold">
                   {currentPreview} of {totalAligners || "?"}
@@ -151,6 +153,7 @@ export const LabelForm = () => {
                   variant="outline"
                   onClick={() => setCurrentPreview(Math.max(1, currentPreview - 1))}
                   disabled={currentPreview <= 1}
+                  className="border-gray-300"
                 >
                   Previous
                 </Button>
@@ -158,6 +161,7 @@ export const LabelForm = () => {
                   variant="outline"
                   onClick={() => setCurrentPreview(Math.min(parseInt(totalAligners) || 1, currentPreview + 1))}
                   disabled={!totalAligners || currentPreview >= parseInt(totalAligners)}
+                  className="border-gray-300"
                 >
                   Next
                 </Button>
@@ -166,7 +170,7 @@ export const LabelForm = () => {
           </div>
           
           <Button
-            className="w-full"
+            className="w-full border-gray-300"
             onClick={handlePrint}
             disabled={!totalAligners || !startDate}
           >

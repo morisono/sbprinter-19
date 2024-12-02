@@ -28,7 +28,7 @@ export const PasswordProtection = ({ onAuthenticated }: PasswordProtectionProps)
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md bg-background shadow-sm border border-black">
         <CardHeader>
           {/* Removed CardTitle with "Smilebar Printer" text */}
         </CardHeader>
@@ -39,9 +39,12 @@ export const PasswordProtection = ({ onAuthenticated }: PasswordProtectionProps)
               placeholder="Enter password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="text-lg"
+              className="text-lg border-black bg-[#FFE4E1]"
             />
-            <Button type="submit" className="w-full">
+            <Button 
+              type="submit" 
+              className="w-full border-black bg-black text-white hover:bg-gray-800"
+            >
               Access Printer
             </Button>
           </form>

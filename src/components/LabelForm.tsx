@@ -26,14 +26,14 @@ export const LabelForm = () => {
   };
 
   const generateZplForLabel = (alignerNum: number, totalAligners: string, date: Date) => {
-    // ZPL code for 1.25" x 1.25" label
+    // ZPL code for 1.25" x 1.25" label with larger fonts
     return `^XA
-^CF0,30
+^CF0,40
 ^FO50,50^FDSMILEBAR^FS
-^CF0,25
-^FO50,90^FD${alignerNum} of ${totalAligners}^FS
-^CF0,20
-^FO50,130^FD${format(date, "MMM d, yyyy")}^FS
+^CF0,45
+^FO50,100^FD${alignerNum} of ${totalAligners}^FS
+^CF0,35
+^FO50,160^FD${format(date, "MMM d, yyyy")}^FS
 ^XZ`;
   };
 
@@ -134,12 +134,12 @@ export const LabelForm = () => {
             </div>
             
             <div className="flex flex-col items-center justify-center">
-              <div className="label-preview bg-white border-2 border-gray-200 rounded-lg p-4 flex flex-col items-center justify-center space-y-2">
-                <div className="font-bold text-lg">SMILEBAR</div>
-                <div className="text-sm">
+              <div className="label-preview bg-white border-2 border-gray-200 rounded-lg p-4 flex flex-col items-center justify-center space-y-4">
+                <div className="font-bold text-2xl">SMILEBAR</div>
+                <div className="text-xl font-semibold">
                   {currentPreview} of {totalAligners || "?"}
                 </div>
-                <div className="text-xs">
+                <div className="text-lg">
                   {startDate ? format(
                     getChangeDate(startDate, changeFrequency, currentPreview),
                     "MMM d, yyyy"

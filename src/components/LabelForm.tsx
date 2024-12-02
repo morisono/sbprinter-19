@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -93,7 +93,7 @@ export const LabelForm = () => {
     <div className="min-h-screen p-4 max-w-4xl mx-auto">
       <Card className="mb-8">
         <CardHeader>
-          <CardTitle className="text-2xl text-center">Smilebar Printer</CardTitle>
+          {/* Removed CardTitle */}
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

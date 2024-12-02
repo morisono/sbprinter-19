@@ -26,7 +26,6 @@ export const LabelForm = () => {
   };
 
   const generateZplForLabel = (alignerNum: number, totalAligners: string, date: Date) => {
-    // ZPL code for 1.25" x 1.25" label with larger fonts
     return `^XA
 ^CF0,40
 ^FO50,50^FDSMILEBAR^FS

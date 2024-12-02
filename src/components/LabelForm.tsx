@@ -16,7 +16,8 @@ export const LabelForm = () => {
     const weeks = frequency === "weekly" ? alignerNumber - 1 : 
                  frequency === "biweekly" ? (alignerNumber - 1) * 2 : 
                  (alignerNumber - 1) * 4;
-    return addWeeks(start, weeks);
+    const startOfDay = new Date(start.setHours(0, 0, 0, 0));
+    return addWeeks(startOfDay, weeks);
   };
 
   const handlePrint = () => {
@@ -71,10 +72,10 @@ export const LabelForm = () => {
               <div className="label-preview bg-white border-2 border-gray-200 rounded-lg p-4 flex flex-col items-center justify-center space-y-2">
                 <div className="font-bold text-lg">SMILEBAR</div>
                 <div className="text-sm">
-                  Aligner {currentPreview} of {totalAligners || "?"}
+                  {currentPreview} of {totalAligners || "?"}
                 </div>
                 <div className="text-xs">
-                  Change: {startDate ? format(
+                  {startDate ? format(
                     getChangeDate(new Date(startDate), changeFrequency, currentPreview),
                     "MMM d, yyyy"
                   ) : "Select date"}

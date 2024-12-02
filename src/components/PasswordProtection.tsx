@@ -29,7 +29,7 @@ export const PasswordProtection = ({ onAuthenticated }: PasswordProtectionProps)
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
-      <Card className="w-full max-w-md bg-background shadow-sm">
+      <Card className="w-full max-w-md bg-background shadow-sm border-0">
         <CardHeader>
           {/* Removed CardTitle with "Smilebar Printer" text */}
         </CardHeader>

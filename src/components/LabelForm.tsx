@@ -186,10 +186,9 @@ export const LabelForm = () => {
         </CardContent>
       </Card>
 
-      <div className="w-full max-w-4xl flex flex-col relative">
-
-        <div className="flex justify-between items-start mb-12">
-          <div className="border border-gray-300 rounded-lg p-2 bg-[#D9E7A3] shadow-sm whitespace-nowrap absolute right-0 top-0">
+      <div className="w-full max-w-4xl flex flex-col items-center relative">
+        <div className="flex justify-center items-start mb-12 w-full">
+          <div className="border border-gray-300 rounded-lg p-2 bg-[#D9E7A3] shadow-sm whitespace-nowrap">
             <span className="text-xs font-semibold text-black flex flex-col">
               Sponsored by{" "}
               <a 
@@ -206,11 +205,11 @@ export const LabelForm = () => {
           </div>
         </div>
 
-        <Collapsible open={isHelpOpen} onOpenChange={setIsHelpOpen} className="w-full">
-          <CollapsibleTrigger className="flex items-center gap-2 text-black hover:text-gray-800 underline">
+        <Collapsible open={isHelpOpen} onOpenChange={setIsHelpOpen} className="w-full text-center">
+          <CollapsibleTrigger className="flex items-center gap-2 text-black hover:text-gray-800 underline mx-auto">
             Help & Set Up
           </CollapsibleTrigger>
-          <CollapsibleContent className="bg-white p-6 rounded-lg border border-gray-200 space-y-4 mt-2">
+          <CollapsibleContent className="bg-white p-6 rounded-lg border border-gray-200 space-y-4 mt-2 text-left">
               <h3 className="text-xl font-bold mb-4">Getting Started Guide</h3>
               
               <div className="space-y-6">
@@ -275,4 +274,3 @@ export const LabelForm = () => {
     </div>
   );
 };
-

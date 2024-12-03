@@ -93,8 +93,10 @@ export const LabelForm = () => {
 
   return (
     <div className="min-h-screen p-4 max-w-4xl mx-auto flex flex-col items-center justify-center">
-      <h1 className="text-3xl font-bold mb-2 text-black">Free Aligner Label Generator</h1>
-      <p className="text-xl text-gray-600 mb-8 text-center">Stop wasting time dating Invisalign pouches by hand.</p>
+      <div className="w-full text-center">
+        <h1 className="text-3xl font-bold mb-2 text-black">Free Aligner Label Generator</h1>
+        <p className="text-xl text-gray-600 mb-8">Stop wasting time dating Invisalign pouches by hand.</p>
+      </div>
       
       <Card className="mb-4 bg-background shadow-sm border border-black w-full">
         <CardHeader>
@@ -128,13 +130,15 @@ export const LabelForm = () => {
             </div>
           </div>
           
-          <Button
-            className="w-full border-black bg-black text-white hover:bg-gray-800"
-            onClick={handlePrint}
-            disabled={!totalAligners || !startDate}
-          >
-            Print All Labels
-          </Button>
+          <div className="flex justify-center w-full">
+            <Button
+              className="w-full md:w-auto px-8 border-black bg-black text-white hover:bg-gray-800"
+              onClick={handlePrint}
+              disabled={!totalAligners || !startDate}
+            >
+              Print All Labels
+            </Button>
+          </div>
         </CardContent>
       </Card>
 

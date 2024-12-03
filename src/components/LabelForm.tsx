@@ -261,5 +261,3 @@ export const LabelForm = () => {
     </div>
   );
 };
-
-export { LabelForm };

@@ -27,12 +27,12 @@ export const LabelForm = () => {
 
   const generateZplForLabel = (alignerNum: number, totalAligners: string, date: Date) => {
     return `^XA
-^CF0,40
-^FO50,50^FDSMILEBAR^FS
+^CF0,60
+^FO50,50^FD${format(date, "MMM d")}^FS
 ^CF0,45
-^FO50,100^FD${alignerNum} of ${totalAligners}^FS
-^CF0,35
-^FO50,160^FD${format(date, "MMM d, yyyy")}^FS
+^FO50,120^FD${format(date, "yyyy")}^FS
+^CF0,45
+^FO50,190^FD${alignerNum} of ${totalAligners}^FS
 ^XZ`;
   };
 
@@ -135,22 +135,19 @@ export const LabelForm = () => {
             
             <div className="flex flex-col items-center justify-center">
               <div className="label-preview bg-white border-2 border-black border-dotted rounded-lg p-4 flex flex-col items-center justify-center space-y-2">
-                <div className="font-bold text-lg">SMILEBAR</div>
-                <div className="text-base leading-tight text-center">
-                  <div className="font-bold">
-                    {startDate ? format(
-                      getChangeDate(startDate, changeFrequency, currentPreview),
-                      "MMM d"
-                    ) : "Select date"}
-                  </div>
-                  <div>
-                    {startDate ? format(
-                      getChangeDate(startDate, changeFrequency, currentPreview),
-                      "yyyy"
-                    ) : ""}
-                  </div>
+                <div className="text-2xl font-bold leading-tight text-center">
+                  {startDate ? format(
+                    getChangeDate(startDate, changeFrequency, currentPreview),
+                    "MMM d"
+                  ) : "Select date"}
                 </div>
-                <div className="text-sm text-gray-600">
+                <div className="text-lg">
+                  {startDate ? format(
+                    getChangeDate(startDate, changeFrequency, currentPreview),
+                    "yyyy"
+                  ) : ""}
+                </div>
+                <div className="text-lg font-semibold mt-2">
                   {currentPreview} of {totalAligners || "?"}
                 </div>
               </div>
@@ -188,4 +185,3 @@ export const LabelForm = () => {
     </div>
   );
 };
-

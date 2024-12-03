@@ -9,7 +9,7 @@ interface HelpSectionProps {
 export const HelpSection = ({ isOpen, onOpenChange }: HelpSectionProps) => {
   return (
     <Collapsible open={isOpen} onOpenChange={onOpenChange} className="w-full text-center">
-      <CollapsibleTrigger className="flex items-center gap-2 text-black hover:text-gray-800 underline mx-auto">
+      <CollapsibleTrigger className="flex items-center gap-2 text-black hover:text-gray-800 underline mx-auto text-sm">
         Help & Set Up
       </CollapsibleTrigger>
       <CollapsibleContent className="bg-white p-6 rounded-lg border border-gray-200 space-y-4 mt-2 text-left">

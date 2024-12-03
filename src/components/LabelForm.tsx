@@ -186,11 +186,12 @@ export const LabelForm = () => {
         </CardContent>
       </Card>
 
-      <Collapsible open={isHelpOpen} onOpenChange={setIsHelpOpen} className="w-full max-w-4xl">
-        <CollapsibleTrigger className="flex items-center gap-2 text-black hover:text-gray-800 underline mb-4">
-          Help & Set Up
-        </CollapsibleTrigger>
-        <CollapsibleContent className="bg-white p-6 rounded-lg border border-gray-200 space-y-4">
+      <div className="w-full max-w-4xl flex justify-between items-center mb-4">
+        <Collapsible open={isHelpOpen} onOpenChange={setIsHelpOpen} className="w-full">
+          <CollapsibleTrigger className="flex items-center gap-2 text-black hover:text-gray-800 underline">
+            Help & Set Up
+          </CollapsibleTrigger>
+          <CollapsibleContent className="bg-white p-6 rounded-lg border border-gray-200 space-y-4">
           <h3 className="text-xl font-bold mb-4">Getting Started Guide</h3>
           
           <div className="space-y-6">
@@ -249,8 +250,12 @@ export const LabelForm = () => {
               </ol>
             </div>
           </div>
-        </CollapsibleContent>
-      </Collapsible>
+          </CollapsibleContent>
+        </Collapsible>
+        <div className="text-sm text-gray-600 ml-4">
+          Sponsored by Harlo 3-in-1 Electrolytes
+        </div>
+      </div>
     </div>
   );
 };

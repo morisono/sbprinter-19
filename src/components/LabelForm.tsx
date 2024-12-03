@@ -6,6 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { format, addWeeks, parseISO } from "date-fns";
 import { useToast } from "@/components/ui/use-toast";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { ExternalLink } from "lucide-react";
 
 export const LabelForm = () => {
   const today = new Date();
@@ -15,6 +17,7 @@ export const LabelForm = () => {
   const [startDate, setStartDate] = useState(formattedToday);
   const [changeFrequency, setChangeFrequency] = useState("weekly");
   const [currentPreview, setCurrentPreview] = useState(1);
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
   const { toast } = useToast();
 
   const getChangeDate = (start: Date | string, frequency: string, alignerNumber: number) => {
@@ -90,8 +93,8 @@ export const LabelForm = () => {
   };
 
   return (
-    <div className="min-h-screen p-4 max-w-4xl mx-auto flex items-center justify-center">
-      <Card className="mb-8 bg-background shadow-sm border border-black w-full">
+    <div className="min-h-screen p-4 max-w-4xl mx-auto flex flex-col items-center justify-center">
+      <Card className="mb-4 bg-background shadow-sm border border-black w-full">
         <CardHeader>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -182,6 +185,72 @@ export const LabelForm = () => {
           </Button>
         </CardContent>
       </Card>
+
+      <Collapsible open={isHelpOpen} onOpenChange={setIsHelpOpen} className="w-full max-w-4xl">
+        <CollapsibleTrigger className="flex items-center gap-2 text-blue-600 hover:text-blue-800 underline mb-4">
+          Help & Set Up
+        </CollapsibleTrigger>
+        <CollapsibleContent className="bg-white p-6 rounded-lg border border-gray-200 space-y-4">
+          <h3 className="text-xl font-bold mb-4">Getting Started Guide</h3>
+          
+          <div className="space-y-6">
+            <div>
+              <h4 className="font-semibold mb-2">Required Hardware:</h4>
+              <ul className="list-disc pl-6 space-y-2">
+                <li>
+                  <a href="https://www.zebra.com/smb/us/en/zsb-dp12.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 flex items-center gap-1">
+                    Zebra ZSB 2 Inch Printer <ExternalLink className="h-4 w-4" />
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.zebra.com/smb/us/en/small-multipurpose.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 flex items-center gap-1">
+                    1.25" x 1.25" Labels <ExternalLink className="h-4 w-4" />
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-2">Setup Instructions:</h4>
+              <ol className="list-decimal pl-6 space-y-2">
+                <li>
+                  <a href="https://www.zebra.com/us/en/support-downloads/software/printer-software/browser-print.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 flex items-center gap-1">
+                    Download Zebra Browser Print <ExternalLink className="h-4 w-4" />
+                  </a>
+                </li>
+                <li>Install the Zebra Browser Print software on your computer</li>
+                <li>Connect your Zebra printer via USB and power it on</li>
+                <li>Open the Zebra Browser Print application</li>
+                <li>The printer should automatically be detected and ready to use</li>
+              </ol>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-2">Wireless Printing Setup:</h4>
+              <ol className="list-decimal pl-6 space-y-2">
+                <li>Connect your printer via USB initially</li>
+                <li>Open the Zebra Browser Print application</li>
+                <li>Click on "Configure Printer"</li>
+                <li>Select "Network" and choose your Wi-Fi network</li>
+                <li>Enter your Wi-Fi password</li>
+                <li>Once connected, you can disconnect the USB cable</li>
+                <li>The printer will now be available wirelessly through Browser Print</li>
+              </ol>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-2">Using the Label Generator:</h4>
+              <ol className="list-decimal pl-6 space-y-2">
+                <li>Enter the total number of aligners</li>
+                <li>Select your start date</li>
+                <li>Choose your aligner change frequency</li>
+                <li>Preview the labels using the Previous/Next buttons</li>
+                <li>Click "Print All Labels" to print your complete set</li>
+              </ol>
+            </div>
+          </div>
+        </CollapsibleContent>
+      </Collapsible>
     </div>
   );
 };

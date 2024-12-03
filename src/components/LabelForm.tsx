@@ -188,7 +188,7 @@ export const LabelForm = () => {
 
       <div className="w-full max-w-4xl flex flex-col items-center relative">
         <div className="flex justify-center items-start mb-12 w-full">
-          <div className="border border-gray-300 rounded-lg p-2 bg-[#D9E7A3] shadow-sm whitespace-nowrap">
+          <div className="border border-gray-300 rounded-lg p-2 bg-[#D9E7A3] shadow-sm max-w-[90%] sm:max-w-none">
             <span className="text-xs font-semibold text-black flex flex-col">
               Sponsored by{" "}
               <a 

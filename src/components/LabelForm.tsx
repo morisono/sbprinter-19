@@ -187,7 +187,7 @@ export const LabelForm = () => {
       </Card>
 
       <Collapsible open={isHelpOpen} onOpenChange={setIsHelpOpen} className="w-full max-w-4xl">
-        <CollapsibleTrigger className="flex items-center gap-2 text-blue-600 hover:text-blue-800 underline mb-4">
+        <CollapsibleTrigger className="flex items-center gap-2 text-black hover:text-gray-800 underline mb-4">
           Help & Set Up
         </CollapsibleTrigger>
         <CollapsibleContent className="bg-white p-6 rounded-lg border border-gray-200 space-y-4">

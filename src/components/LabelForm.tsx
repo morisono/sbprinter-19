@@ -252,12 +252,15 @@ export const LabelForm = () => {
           </div>
           </CollapsibleContent>
         </Collapsible>
-        <div className="border border-gray-300 rounded-lg p-2 bg-[#F1F0FB] shadow-sm whitespace-nowrap">
-          <span className="text-xs font-semibold text-gray-700">
-            Sponsored by <span className="text-[#9b87f5]">Harlo 3-in-1 Electrolytes</span>
+
+        <div className="border border-gray-300 rounded-lg p-2 bg-[#D9E7A3] shadow-sm whitespace-nowrap">
+          <span className="text-xs font-semibold text-black">
+            Sponsored by <span className="text-black underline">Harlo 3-in-1 Electrolytes</span>
           </span>
         </div>
+
       </div>
     </div>
   );
 };
+

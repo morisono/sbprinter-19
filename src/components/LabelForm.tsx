@@ -28,7 +28,7 @@ export const LabelForm = () => {
   const generateZplForLabel = (alignerNum: number, totalAligners: string, date: Date) => {
     return `^XA
 ^CF0,40
-^FO50,50^FDSMILEBAR^FS
+^FO50,50^FDUSE STARTING^FS
 ^CF0,45
 ^FO50,100^FD${alignerNum} of ${totalAligners}^FS
 ^CF0,35
@@ -135,7 +135,7 @@ export const LabelForm = () => {
             
             <div className="flex flex-col items-center justify-center">
               <div className="label-preview bg-white border-2 border-black border-dotted rounded-lg p-4 flex flex-col items-center justify-center space-y-2">
-                <div className="font-bold text-lg">SMILEBAR</div>
+                <div className="font-bold text-lg">USE STARTING</div>
                 <div className="text-base leading-tight text-center">
                   <div className="font-bold">
                     {startDate ? format(

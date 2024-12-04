@@ -143,24 +143,6 @@ export const LabelForm = () => {
       </Card>
 
       <div className="w-full max-w-4xl flex flex-col items-center relative">
-        <div className="flex justify-center items-start mb-12 w-full">
-          <div className="border border-gray-300 rounded-lg p-2 bg-[#D9E7A3] shadow-sm max-w-[90%] sm:max-w-none">
-            <span className="text-xs font-semibold text-black flex flex-col">
-              Sponsored by{" "}
-              <a 
-                href="https://drinkharlo.com?utm_source=aligner_printer&utm_medium=aligner_printer&utm_campaign=aligner_printer"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-black underline"
-              >
-                Harlo 3-in-1 Electrolytes,{"\n"}
-                Collagen, and Creatine{"\n"}
-                Performance Drink Mix
-              </a>
-            </span>
-          </div>
-        </div>
-
         <HelpSection isOpen={isHelpOpen} onOpenChange={setIsHelpOpen} />
       </div>
     </div>

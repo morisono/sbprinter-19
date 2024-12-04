@@ -93,9 +93,12 @@ export const LabelForm = () => {
 
   return (
     <div className="min-h-screen p-4 max-w-4xl mx-auto flex flex-col items-center justify-center">
-      <div className="w-full text-center">
-        <h1 className="text-3xl font-bold mb-2 text-black">Free Aligner Label Generator</h1>
-        <p className="text-xl text-gray-600 mb-8">Stop wasting time dating Invisalign pouches by hand.</p>
+      <div className="w-full text-center mb-8">
+        <img 
+          src="https://cdn.prod.website-files.com/666b106c0cfbd1b1d23da273/666b106c0cfbd1b1d23da352_SB_old-p-500.png" 
+          alt="SmileBar Logo" 
+          className="mx-auto max-w-[300px] h-auto"
+        />
       </div>
       
       <Card className="mb-4 bg-background shadow-sm border border-black w-full">

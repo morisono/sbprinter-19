@@ -18,13 +18,13 @@ export const LabelPreview = ({
   return (
     <div className="label-preview bg-white border-2 border-black border-dotted rounded-lg p-4 flex flex-col items-center justify-center space-y-2 my-4">
       <div className="text-sm font-bold uppercase tracking-wide">SMILEBAR</div>
-      <div className="text-xl font-bold leading-none text-center">
+      <div className="text-xl font-bold text-center mb-0">
         {startDate ? format(
           getChangeDate(startDate, changeFrequency, currentPreview),
           "MMM d"
         ) : "Select date"}
       </div>
-      <div className="text-lg leading-none -mt-1">
+      <div className="text-lg -mt-1">
         {startDate ? format(
           getChangeDate(startDate, changeFrequency, currentPreview),
           "yyyy"

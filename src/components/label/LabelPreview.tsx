@@ -24,7 +24,7 @@ export const LabelPreview = ({
           "MMM d"
         ) : "Select date"}
       </div>
-      <div className="text-lg -mt-4">
+      <div className="text-lg -mt-6">
         {startDate ? format(
           getChangeDate(startDate, changeFrequency, currentPreview),
           "yyyy"

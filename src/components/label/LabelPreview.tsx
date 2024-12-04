@@ -16,7 +16,7 @@ export const LabelPreview = ({
   getChangeDate 
 }: LabelPreviewProps) => {
   return (
-    <div className="label-preview bg-white border-2 border-black border-dotted rounded-lg p-4 flex flex-col items-center justify-center space-y-2 my-4">
+    <div className="label-preview bg-white border-2 border-black border-dotted rounded-lg p-4 flex flex-col items-center justify-center space-y-2 my-4 pt-6">
       <div className="text-sm font-bold uppercase tracking-wide">SMILEBAR</div>
       <div className="text-center">
         <div className="text-xl font-bold">{startDate ? format(getChangeDate(startDate, changeFrequency, currentPreview), "MMM d") : "Select date"}</div>

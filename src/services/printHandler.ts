@@ -60,13 +60,13 @@ export const handlePrinting = async ({
     } else {
       console.log('Starting DYMO print process...');
       
-      // Check if DYMO service is running first
+      // Check if DYMO framework is available and service is running
       const isDymoServiceRunning = await checkDymoService();
       
       if (!isDymoServiceRunning) {
         onError(
           "DYMO Service Not Running",
-          "Please follow these steps in order:\n1. Download and install DYMO Connect from dymo.com\n2. Open DYMO Connect software and ensure it recognizes your printer\n3. Connect your printer via USB and power it on\n4. Restart your computer\n5. Try printing again"
+          "Please follow these steps in order:\n1. Download and install DYMO Connect from dymo.com\n2. Open DYMO Connect software\n3. Connect your printer via USB and power it on\n4. Refresh this page\n5. If still not working, restart your computer and try again"
         );
         return;
       }

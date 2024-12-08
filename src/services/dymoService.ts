@@ -2,32 +2,26 @@ export const checkDymoService = async () => {
   try {
     console.log('Attempting to connect to DYMO Web Service...');
     
-    // First try with no-cors to check if service exists
-    const response = await fetch('http://127.0.0.1:41951/DYMO/DLS/Printing/Check', {
-      method: 'GET',
-      mode: 'no-cors',
-      cache: 'no-cache',
-      credentials: 'omit',
-      headers: {
-        'Accept': '*/*',
-      }
-    });
-    
-    console.log('DYMO service check response:', {
-      status: response.status,
-      type: response.type,
-      ok: response.ok
-    });
-
-    // With no-cors, we can only check if we got an opaque response
-    // An opaque response means the service is running
-    if (response.type === 'opaque') {
-      console.log('DYMO service is running');
-      return true;
+    // First check if DYMO framework is available in window
+    // @ts-ignore
+    if (!window.dymo?.label?.framework) {
+      console.error('DYMO framework not available in window object');
+      return false;
     }
 
-    console.log('DYMO service check failed - service may not be running');
-    return false;
+    // Try to get printers directly through DYMO framework instead of fetch
+    try {
+      // @ts-ignore
+      const printers = window.dymo.label.framework.getPrinters();
+      console.log('Successfully retrieved DYMO printers:', printers);
+      return true;
+    } catch (frameworkError) {
+      console.error('Error accessing DYMO framework:', {
+        name: frameworkError.name,
+        message: frameworkError.message
+      });
+      return false;
+    }
   } catch (error) {
     console.error('DYMO service connection error:', {
       _type: error.constructor.name,

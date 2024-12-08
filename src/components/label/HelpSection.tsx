@@ -56,7 +56,9 @@ export const HelpSection = ({ isOpen, onOpenChange }: HelpSectionProps) => {
               </li>
               <li>Install DYMO Connect and the DYMO Label Framework</li>
               <li>Connect your DYMO printer via USB and power it on</li>
-              <li>The printer should automatically be detected</li>
+              <li>Open DYMO Connect and ensure your printer is recognized</li>
+              <li>Load 1" x 1" (30334) labels into your printer</li>
+              <li>Make sure to select "DYMO" in the printer toggle above</li>
             </ol>
           </div>
 
@@ -70,6 +72,17 @@ export const HelpSection = ({ isOpen, onOpenChange }: HelpSectionProps) => {
               <li>Preview the labels using the Previous/Next buttons</li>
               <li>Click "Print All Labels" to print your complete set</li>
             </ol>
+          </div>
+
+          <div>
+            <h4 className="font-semibold mb-2">Troubleshooting:</h4>
+            <ul className="list-disc pl-6 space-y-2">
+              <li>Make sure your printer is powered on and connected via USB</li>
+              <li>For Zebra: Ensure Browser Print software is installed and running</li>
+              <li>For DYMO: Ensure DYMO Connect software is installed and the printer is recognized</li>
+              <li>Check that you have the correct label size loaded (1.25" x 1.25" for Zebra, 1" x 1" for DYMO)</li>
+              <li>Try refreshing the page if the printer is not detected</li>
+            </ul>
           </div>
         </div>
       </CollapsibleContent>

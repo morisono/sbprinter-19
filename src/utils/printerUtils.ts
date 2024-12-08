@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+
 export type PrinterType = 'zebra' | 'dymo';
 
 export const generateZplForLabel = (alignerNum: number, totalAligners: string, date: Date) => {

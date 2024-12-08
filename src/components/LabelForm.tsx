@@ -86,14 +86,17 @@ export const LabelForm = () => {
           // Try to detect if DYMO Web Service is running
           try {
             // @ts-ignore
-            const dymoCheckResponse = await fetch('http://127.0.0.1:41951/DYMO/DLS/Printing/Check');
+            const dymoCheckResponse = await fetch('http://127.0.0.1:41951/DYMO/DLS/Printing/Check', {
+              method: 'GET',
+              mode: 'no-cors' // Add this to handle CORS issues
+            });
             console.log('DYMO service check response:', dymoCheckResponse);
             
             if (!dymoCheckResponse.ok) {
               toast({
                 variant: "destructive",
                 title: "DYMO Service Not Running",
-                description: "Please start the DYMO Service and refresh the page",
+                description: "Please ensure DYMO Connect software is running and the DYMO Web Service is started. You may need to restart your computer after installation.",
               });
               return;
             }
@@ -102,7 +105,7 @@ export const LabelForm = () => {
             toast({
               variant: "destructive",
               title: "DYMO Service Not Running",
-              description: "Please start the DYMO Service and refresh the page",
+              description: "Please ensure DYMO Connect software is running and the DYMO Web Service is started. Try these steps:\n1. Install DYMO Connect\n2. Restart your computer\n3. Make sure the DYMO Web Service is running",
             });
             return;
           }
@@ -117,7 +120,7 @@ export const LabelForm = () => {
             toast({
               variant: "destructive",
               title: "No DYMO printer found",
-              description: "Please connect a DYMO printer and refresh the page",
+              description: "Please connect a DYMO printer and refresh the page. Make sure it appears in DYMO Connect software.",
             });
             return;
           }
@@ -150,7 +153,7 @@ export const LabelForm = () => {
           toast({
             variant: "destructive",
             title: "DYMO Framework Error",
-            description: "Please ensure DYMO software is properly installed and running",
+            description: "Please ensure DYMO Connect software is properly installed and running. Try restarting the DYMO Web Service.",
           });
         }
       }
@@ -159,7 +162,7 @@ export const LabelForm = () => {
       toast({
         variant: "destructive",
         title: "Print Error",
-        description: "Failed to connect to printer",
+        description: "Failed to connect to printer. Please check your DYMO Connect software installation and printer connection.",
       });
     }
   };

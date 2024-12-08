@@ -79,52 +79,83 @@ export const LabelForm = () => {
       } else {
         // @ts-ignore
         const dymo = window.dymo;
+        console.log('DYMO object:', dymo);
+        console.log('DYMO framework:', dymo?.label?.framework);
         
         if (!dymo?.label?.framework) {
-          toast({
-            variant: "destructive",
-            title: "DYMO Label Framework not found",
-            description: "Please install DYMO Label Software and refresh the page",
-          });
-          return;
-        }
-
-        const totalLabels = parseInt(totalAligners);
-        const printers = dymo.label.framework.getPrinters();
-        const printer = printers.find((p: any) => p.printerType === 'LabelWriterPrinter');
-
-        if (!printer) {
-          toast({
-            variant: "destructive",
-            title: "No DYMO printer found",
-            description: "Please connect a DYMO printer and try again",
-          });
-          return;
-        }
-
-        for (let i = 1; i <= totalLabels; i++) {
-          const changeDate = getChangeDate(new Date(startDate), changeFrequency, i);
-          const labelXml = generateDymoXml(i, totalAligners, changeDate);
-          const label = dymo.label.framework.openLabelXml(labelXml);
-          
+          // Try to detect if DYMO Web Service is running
           try {
-            label.print(printer.name);
+            // @ts-ignore
+            const dymoCheckResponse = await fetch('http://127.0.0.1:41951/DYMO/DLS/Printing/Check');
+            console.log('DYMO service check response:', dymoCheckResponse);
+            
+            if (!dymoCheckResponse.ok) {
+              toast({
+                variant: "destructive",
+                title: "DYMO Service Not Running",
+                description: "Please start the DYMO Service and refresh the page",
+              });
+              return;
+            }
           } catch (error) {
+            console.log('DYMO service check error:', error);
             toast({
               variant: "destructive",
-              title: "Print Error",
-              description: `Error printing label ${i}: ${error}`,
+              title: "DYMO Service Not Running",
+              description: "Please start the DYMO Service and refresh the page",
             });
             return;
           }
         }
 
-        toast({
-          title: "Print Success",
-          description: `Sent ${totalLabels} labels to printer`,
-        });
+        try {
+          const printers = dymo.label.framework.getPrinters();
+          console.log('Available DYMO printers:', printers);
+          const printer = printers.find((p: any) => p.printerType === 'LabelWriterPrinter');
+
+          if (!printer) {
+            toast({
+              variant: "destructive",
+              title: "No DYMO printer found",
+              description: "Please connect a DYMO printer and refresh the page",
+            });
+            return;
+          }
+
+          const totalLabels = parseInt(totalAligners);
+          for (let i = 1; i <= totalLabels; i++) {
+            const changeDate = getChangeDate(new Date(startDate), changeFrequency, i);
+            const labelXml = generateDymoXml(i, totalAligners, changeDate);
+            const label = dymo.label.framework.openLabelXml(labelXml);
+            
+            try {
+              label.print(printer.name);
+            } catch (error) {
+              console.error('DYMO print error:', error);
+              toast({
+                variant: "destructive",
+                title: "Print Error",
+                description: `Error printing label ${i}: ${error}`,
+              });
+              return;
+            }
+          }
+
+          toast({
+            title: "Print Success",
+            description: `Sent ${totalLabels} labels to printer`,
+          });
+        } catch (error) {
+          console.error('DYMO framework error:', error);
+          toast({
+            variant: "destructive",
+            title: "DYMO Framework Error",
+            description: "Please ensure DYMO software is properly installed and running",
+          });
+        }
       }
     } catch (error) {
+      console.error('General print error:', error);
       toast({
         variant: "destructive",
         title: "Print Error",

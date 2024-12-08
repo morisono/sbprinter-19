@@ -38,9 +38,9 @@ export const generateDymoXml = (alignerNum: number, totalAligners: string, date:
       <Verticalized>False</Verticalized>
       <StyledText>
         <Element>
-          <String>${format(date, "MMM d")}\n${format(date, "yyyy")}\n${alignerNum} of ${totalAligners}</String>
+          <String>SMILEBAR\n${format(date, "MMM d")}\n${format(date, "yyyy")}\n${alignerNum} of ${totalAligners}</String>
           <Attributes>
-            <Font Family="Arial" Size="12" Bold="True" Italic="False" Underline="False" Strikeout="False" />
+            <Font Family="Arial" Size="10" Bold="True" Italic="False" Underline="False" Strikeout="False" />
             <ForeColor Alpha="255" Red="0" Green="0" Blue="0" />
           </Attributes>
         </Element>

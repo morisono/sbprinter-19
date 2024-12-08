@@ -9,12 +9,12 @@ export const checkDymoService = async () => {
       return false;
     }
 
-    // Try to get printers directly through DYMO framework instead of fetch
+    // Try to get printers directly through DYMO framework
     try {
       // @ts-ignore
       const printers = window.dymo.label.framework.getPrinters();
       console.log('Successfully retrieved DYMO printers:', printers);
-      return true;
+      return printers.length > 0;
     } catch (frameworkError) {
       console.error('Error accessing DYMO framework:', {
         name: frameworkError.name,
@@ -46,11 +46,12 @@ export const getDymoPrinters = () => {
     const printers = dymo.label.framework.getPrinters();
     console.log('Available DYMO printers:', printers);
     
+    // Find first LabelWriter printer
     const labelWriter = printers.find((p: any) => p.printerType === 'LabelWriterPrinter');
     if (!labelWriter) {
       console.error('No DYMO LabelWriter printer found');
     }
-    return labelWriter;
+    return labelWriter || null;
   } catch (error) {
     console.error('Error getting DYMO printers:', error);
     return null;

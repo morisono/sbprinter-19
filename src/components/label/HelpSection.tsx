@@ -25,8 +25,8 @@ export const HelpSection = ({ isOpen, onOpenChange }: HelpSectionProps) => {
                 </a>
               </li>
               <li>
-                <a href="https://www.dymo.com/label-makers-printers/labelwriter-wireless-printer/SAP_2002150.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 flex items-center gap-1">
-                  DYMO LabelWriter (1" x 1" labels) <ExternalLink className="h-4 w-4" />
+                <a href="https://www.dymo.com/support?cfid=user-guide" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 flex items-center gap-1">
+                  DYMO LabelWriter 550 (1" x 1" labels) <ExternalLink className="h-4 w-4" />
                 </a>
               </li>
             </ul>
@@ -50,7 +50,7 @@ export const HelpSection = ({ isOpen, onOpenChange }: HelpSectionProps) => {
             <h4 className="font-semibold mb-2">DYMO Printer Setup:</h4>
             <ol className="list-decimal pl-6 space-y-2">
               <li>
-                <a href="https://www.dymo.com/support?cfid=online-support-software" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 flex items-center gap-1">
+                <a href="https://www.dymo.com/support?cfid=user-guide" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 flex items-center gap-1">
                   Download DYMO Connect Software <ExternalLink className="h-4 w-4" />
                 </a>
               </li>

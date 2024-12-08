@@ -59,12 +59,14 @@ export const handlePrinting = async ({
       });
     } else {
       console.log('Starting DYMO print process...');
+      
+      // Check if DYMO service is running first
       const isDymoServiceRunning = await checkDymoService();
       
       if (!isDymoServiceRunning) {
         onError(
           "DYMO Service Not Running",
-          "Please follow these steps in order:\n1. Download and install DYMO Connect from dymo.com\n2. Open DYMO Connect software and ensure it recognizes your printer\n3. Restart your computer\n4. Try printing again"
+          "Please follow these steps in order:\n1. Download and install DYMO Connect from dymo.com\n2. Open DYMO Connect software and ensure it recognizes your printer\n3. Connect your printer via USB and power it on\n4. Restart your computer\n5. Try printing again"
         );
         return;
       }
@@ -83,15 +85,15 @@ export const handlePrinting = async ({
       for (let i = 1; i <= totalLabels; i++) {
         const changeDate = getChangeDate(startDate, changeFrequency, i);
         const labelXml = generateDymoXml(i, totalLabels.toString(), changeDate);
-        const label = dymo.label.framework.openLabelXml(labelXml);
         
         try {
+          const label = dymo.label.framework.openLabelXml(labelXml);
           label.print(printer.name);
         } catch (error) {
           console.error('DYMO print error:', error);
           onError(
             "Print Error",
-            `Error printing label ${i}: ${error}`
+            `Error printing label ${i}: ${error.message}`
           );
           return;
         }

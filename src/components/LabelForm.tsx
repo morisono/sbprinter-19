@@ -7,6 +7,9 @@ import { LabelPreview } from "./label/LabelPreview";
 import { PreviewControls } from "./label/PreviewControls";
 import { LabelFormInputs } from "./label/LabelFormInputs";
 import { HelpSection } from "./label/HelpSection";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { PrinterType, generateZplForLabel, generateDymoXml } from "@/utils/printerUtils";
 
 export const LabelForm = () => {
   const today = new Date();
@@ -17,6 +20,7 @@ export const LabelForm = () => {
   const [changeFrequency, setChangeFrequency] = useState("weekly");
   const [currentPreview, setCurrentPreview] = useState(1);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
+  const [printerType, setPrinterType] = useState<PrinterType>("zebra");
   const { toast } = useToast();
 
   const getChangeDate = (start: Date | string, frequency: string, alignerNumber: number) => {
@@ -27,61 +31,99 @@ export const LabelForm = () => {
     return addWeeks(startDate, weeks);
   };
 
-  const generateZplForLabel = (alignerNum: number, totalAligners: string, date: Date) => {
-    return `^XA
-^CF0,60
-^FO50,50^FD${format(date, "MMM d")}^FS
-^CF0,45
-^FO50,120^FD${format(date, "yyyy")}^FS
-^CF0,45
-^FO50,190^FD${alignerNum} of ${totalAligners}^FS
-^XZ`;
-  };
-
   const handlePrint = async () => {
     try {
-      // @ts-ignore
-      const zebraBrowserPrintInterface = window.BrowserPrint;
-      
-      if (!zebraBrowserPrintInterface) {
-        toast({
-          variant: "destructive",
-          title: "Zebra Browser Print not found",
-          description: "Please install Zebra Browser Print and refresh the page",
-        });
-        return;
-      }
-
-      zebraBrowserPrintInterface.getDefaultPrinter((printer: any) => {
-        if (printer) {
-          const totalLabels = parseInt(totalAligners);
-          for (let i = 1; i <= totalLabels; i++) {
-            const changeDate = getChangeDate(new Date(startDate), changeFrequency, i);
-            const zpl = generateZplForLabel(i, totalAligners, changeDate);
-            
-            printer.send(zpl, (response: any) => {
-              if (response.error) {
-                toast({
-                  variant: "destructive",
-                  title: "Print Error",
-                  description: `Error printing label ${i}: ${response.error}`,
-                });
-              }
-            });
-          }
-          
-          toast({
-            title: "Print Success",
-            description: `Sent ${totalLabels} labels to printer`,
-          });
-        } else {
+      if (printerType === 'zebra') {
+        // @ts-ignore
+        const zebraBrowserPrintInterface = window.BrowserPrint;
+        
+        if (!zebraBrowserPrintInterface) {
           toast({
             variant: "destructive",
-            title: "No printer found",
-            description: "Please connect a Zebra printer and try again",
+            title: "Zebra Browser Print not found",
+            description: "Please install Zebra Browser Print and refresh the page",
           });
+          return;
         }
-      });
+
+        zebraBrowserPrintInterface.getDefaultPrinter((printer: any) => {
+          if (printer) {
+            const totalLabels = parseInt(totalAligners);
+            for (let i = 1; i <= totalLabels; i++) {
+              const changeDate = getChangeDate(new Date(startDate), changeFrequency, i);
+              const zpl = generateZplForLabel(i, totalAligners, changeDate);
+              
+              printer.send(zpl, (response: any) => {
+                if (response.error) {
+                  toast({
+                    variant: "destructive",
+                    title: "Print Error",
+                    description: `Error printing label ${i}: ${response.error}`,
+                  });
+                }
+              });
+            }
+            
+            toast({
+              title: "Print Success",
+              description: `Sent ${totalLabels} labels to printer`,
+            });
+          } else {
+            toast({
+              variant: "destructive",
+              title: "No printer found",
+              description: "Please connect a Zebra printer and try again",
+            });
+          }
+        });
+      } else {
+        // @ts-ignore
+        const dymo = window.dymo;
+        
+        if (!dymo?.label?.framework) {
+          toast({
+            variant: "destructive",
+            title: "DYMO Label Framework not found",
+            description: "Please install DYMO Label Software and refresh the page",
+          });
+          return;
+        }
+
+        const totalLabels = parseInt(totalAligners);
+        const printers = dymo.label.framework.getPrinters();
+        const printer = printers.find((p: any) => p.printerType === 'LabelWriterPrinter');
+
+        if (!printer) {
+          toast({
+            variant: "destructive",
+            title: "No DYMO printer found",
+            description: "Please connect a DYMO printer and try again",
+          });
+          return;
+        }
+
+        for (let i = 1; i <= totalLabels; i++) {
+          const changeDate = getChangeDate(new Date(startDate), changeFrequency, i);
+          const labelXml = generateDymoXml(i, totalAligners, changeDate);
+          const label = dymo.label.framework.openLabelXml(labelXml);
+          
+          try {
+            label.print(printer.name);
+          } catch (error) {
+            toast({
+              variant: "destructive",
+              title: "Print Error",
+              description: `Error printing label ${i}: ${error}`,
+            });
+            return;
+          }
+        }
+
+        toast({
+          title: "Print Success",
+          description: `Sent ${totalLabels} labels to printer`,
+        });
+      }
     } catch (error) {
       toast({
         variant: "destructive",
@@ -103,6 +145,16 @@ export const LabelForm = () => {
       
       <Card className="mb-4 bg-background shadow-sm border border-black w-full">
         <CardHeader>
+          <div className="flex items-center justify-end space-x-2">
+            <Label htmlFor="printer-toggle" className="text-sm">
+              {printerType === 'zebra' ? 'Zebra (1.25" x 1.25")' : 'DYMO (1" x 1")'}
+            </Label>
+            <Switch
+              id="printer-toggle"
+              checked={printerType === 'dymo'}
+              onCheckedChange={(checked) => setPrinterType(checked ? 'dymo' : 'zebra')}
+            />
+          </div>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -122,6 +174,7 @@ export const LabelForm = () => {
                 currentPreview={currentPreview}
                 totalAligners={totalAligners}
                 getChangeDate={getChangeDate}
+                printerType={printerType}
               />
               
               <PreviewControls

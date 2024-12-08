@@ -17,52 +17,53 @@ export const HelpSection = ({ isOpen, onOpenChange }: HelpSectionProps) => {
         
         <div className="space-y-6">
           <div>
-            <h4 className="font-semibold mb-2">Required Hardware:</h4>
+            <h4 className="font-semibold mb-2">Supported Printers:</h4>
             <ul className="list-disc pl-6 space-y-2">
               <li>
                 <a href="https://www.zebra.com/smb/us/en/zsb-dp12.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 flex items-center gap-1">
-                  Zebra ZSB 2 Inch Printer <ExternalLink className="h-4 w-4" />
+                  Zebra ZSB 2 Inch Printer (1.25" x 1.25" labels) <ExternalLink className="h-4 w-4" />
                 </a>
               </li>
               <li>
-                <a href="https://www.zebra.com/smb/us/en/small-multipurpose.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 flex items-center gap-1">
-                  1.25" x 1.25" Labels <ExternalLink className="h-4 w-4" />
+                <a href="https://www.dymo.com/label-makers-printers/labelwriter-wireless-printer/SAP_2002150.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 flex items-center gap-1">
+                  DYMO LabelWriter (1" x 1" labels) <ExternalLink className="h-4 w-4" />
                 </a>
               </li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-semibold mb-2">Setup Instructions:</h4>
+            <h4 className="font-semibold mb-2">Zebra Printer Setup:</h4>
             <ol className="list-decimal pl-6 space-y-2">
               <li>
                 <a href="https://www.zebra.com/us/en/support-downloads/software/printer-software/browser-print.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 flex items-center gap-1">
                   Download Zebra Browser Print <ExternalLink className="h-4 w-4" />
                 </a>
               </li>
-              <li>Install the Zebra Browser Print software on your computer</li>
+              <li>Install the Zebra Browser Print software</li>
               <li>Connect your Zebra printer via USB and power it on</li>
-              <li>Open the Zebra Browser Print application</li>
-              <li>The printer should automatically be detected and ready to use</li>
+              <li>The printer should automatically be detected</li>
             </ol>
           </div>
 
           <div>
-            <h4 className="font-semibold mb-2">Wireless Printing Setup:</h4>
+            <h4 className="font-semibold mb-2">DYMO Printer Setup:</h4>
             <ol className="list-decimal pl-6 space-y-2">
-              <li>Connect your printer via USB initially</li>
-              <li>Open the Zebra Browser Print application</li>
-              <li>Click on "Configure Printer"</li>
-              <li>Select "Network" and choose your Wi-Fi network</li>
-              <li>Enter your Wi-Fi password</li>
-              <li>Once connected, you can disconnect the USB cable</li>
-              <li>The printer will now be available wirelessly through Browser Print</li>
+              <li>
+                <a href="https://www.dymo.com/support?cfid=online-support-software" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 flex items-center gap-1">
+                  Download DYMO Connect Software <ExternalLink className="h-4 w-4" />
+                </a>
+              </li>
+              <li>Install DYMO Connect and the DYMO Label Framework</li>
+              <li>Connect your DYMO printer via USB and power it on</li>
+              <li>The printer should automatically be detected</li>
             </ol>
           </div>
 
           <div>
             <h4 className="font-semibold mb-2">Using the Label Generator:</h4>
             <ol className="list-decimal pl-6 space-y-2">
+              <li>Select your printer type using the toggle switch</li>
               <li>Enter the total number of aligners</li>
               <li>Select your start date</li>
               <li>Choose your aligner change frequency</li>

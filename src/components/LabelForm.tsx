@@ -79,48 +79,63 @@ export const LabelForm = () => {
       } else {
         // @ts-ignore
         const dymo = window.dymo;
-        console.log('DYMO object:', dymo);
-        console.log('DYMO framework:', dymo?.label?.framework);
+        console.log('Checking DYMO setup...');
+        console.log('DYMO object available:', !!dymo);
+        console.log('DYMO framework available:', !!(dymo?.label?.framework));
         
         if (!dymo?.label?.framework) {
-          // Try to detect if DYMO Web Service is running
+          console.log('DYMO framework not found, checking web service...');
           try {
+            console.log('Attempting to connect to DYMO Web Service...');
             // @ts-ignore
             const dymoCheckResponse = await fetch('http://127.0.0.1:41951/DYMO/DLS/Printing/Check', {
               method: 'GET',
-              mode: 'no-cors' // Add this to handle CORS issues
+              mode: 'no-cors'
             });
-            console.log('DYMO service check response:', dymoCheckResponse);
+            console.log('DYMO service check response status:', dymoCheckResponse.status);
+            console.log('DYMO service check response type:', dymoCheckResponse.type);
             
-            if (!dymoCheckResponse.ok) {
+            // Since we're using no-cors, we won't get an 'ok' status
+            // Instead, check if we got any response at all
+            if (dymoCheckResponse.type === 'opaque') {
+              console.log('Got opaque response from DYMO service - service might be running but blocked by CORS');
+            } else {
+              console.log('DYMO service response indicates service is not running');
               toast({
                 variant: "destructive",
                 title: "DYMO Service Not Running",
-                description: "Please ensure DYMO Connect software is running and the DYMO Web Service is started. You may need to restart your computer after installation.",
+                description: "Please follow these steps in order:\n1. Download and install DYMO Connect from dymo.com\n2. Open DYMO Connect software and ensure it recognizes your printer\n3. Restart your computer\n4. Try printing again",
               });
               return;
             }
           } catch (error) {
             console.log('DYMO service check error:', error);
+            console.log('Error details:', {
+              message: error.message,
+              name: error.name,
+              stack: error.stack
+            });
             toast({
               variant: "destructive",
               title: "DYMO Service Not Running",
-              description: "Please ensure DYMO Connect software is running and the DYMO Web Service is started. Try these steps:\n1. Install DYMO Connect\n2. Restart your computer\n3. Make sure the DYMO Web Service is running",
+              description: "Please follow these steps in order:\n1. Download and install DYMO Connect from dymo.com\n2. Open DYMO Connect software and ensure it recognizes your printer\n3. Restart your computer\n4. Try printing again",
             });
             return;
           }
         }
 
         try {
+          console.log('Attempting to get DYMO printers...');
           const printers = dymo.label.framework.getPrinters();
           console.log('Available DYMO printers:', printers);
           const printer = printers.find((p: any) => p.printerType === 'LabelWriterPrinter');
+          console.log('Selected printer:', printer);
 
           if (!printer) {
             toast({
               variant: "destructive",
               title: "No DYMO printer found",
-              description: "Please connect a DYMO printer and refresh the page. Make sure it appears in DYMO Connect software.",
+              description: "Please check:\n1. Printer is connected via USB\n2. Printer appears in DYMO Connect software\n3. Try unplugging and reconnecting the printer",
             });
             return;
           }
@@ -150,19 +165,29 @@ export const LabelForm = () => {
           });
         } catch (error) {
           console.error('DYMO framework error:', error);
+          console.log('Error details:', {
+            message: error.message,
+            name: error.name,
+            stack: error.stack
+          });
           toast({
             variant: "destructive",
             title: "DYMO Framework Error",
-            description: "Please ensure DYMO Connect software is properly installed and running. Try restarting the DYMO Web Service.",
+            description: "Please ensure:\n1. DYMO Connect is installed and running\n2. Your printer is connected and recognized in DYMO Connect\n3. Try restarting the DYMO Connect software",
           });
         }
       }
     } catch (error) {
       console.error('General print error:', error);
+      console.log('Error details:', {
+        message: error.message,
+        name: error.name,
+        stack: error.stack
+      });
       toast({
         variant: "destructive",
         title: "Print Error",
-        description: "Failed to connect to printer. Please check your DYMO Connect software installation and printer connection.",
+        description: "Failed to connect to printer. Please check:\n1. DYMO Connect software is installed\n2. Printer is connected and powered on\n3. Printer appears in DYMO Connect software",
       });
     }
   };

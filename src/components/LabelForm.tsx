@@ -7,9 +7,6 @@ import { LabelPreview } from "./label/LabelPreview";
 import { PreviewControls } from "./label/PreviewControls";
 import { LabelFormInputs } from "./label/LabelFormInputs";
 import { HelpSection } from "./label/HelpSection";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { PrinterType } from "@/utils/printerUtils";
 import { handlePrinting } from "@/services/printHandler";
 
 export const LabelForm = () => {
@@ -21,7 +18,6 @@ export const LabelForm = () => {
   const [changeFrequency, setChangeFrequency] = useState("weekly");
   const [currentPreview, setCurrentPreview] = useState(1);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
-  const [printerType, setPrinterType] = useState<PrinterType>("zebra");
   const { toast } = useToast();
 
   const getChangeDate = (start: Date | string, frequency: string, alignerNumber: number) => {
@@ -34,7 +30,7 @@ export const LabelForm = () => {
 
   const handlePrint = async () => {
     await handlePrinting({
-      printerType,
+      printerType: 'zebra',
       totalLabels: parseInt(totalAligners),
       startDate: new Date(startDate),
       changeFrequency,
@@ -66,18 +62,6 @@ export const LabelForm = () => {
       </div>
       
       <Card className="mb-4 bg-background shadow-sm border border-black w-full">
-        <CardHeader>
-          <div className="flex items-center justify-end space-x-2">
-            <Label htmlFor="printer-toggle" className="text-sm">
-              {printerType === 'zebra' ? 'Zebra (1.25" x 1.25")' : 'DYMO (1" x 1")'}
-            </Label>
-            <Switch
-              id="printer-toggle"
-              checked={printerType === 'dymo'}
-              onCheckedChange={(checked) => setPrinterType(checked ? 'dymo' : 'zebra')}
-            />
-          </div>
-        </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <LabelFormInputs
@@ -96,7 +80,7 @@ export const LabelForm = () => {
                 currentPreview={currentPreview}
                 totalAligners={totalAligners}
                 getChangeDate={getChangeDate}
-                printerType={printerType}
+                printerType="zebra"
               />
               
               <PreviewControls

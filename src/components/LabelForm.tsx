@@ -38,8 +38,9 @@ export const LabelForm = () => {
         changeFrequency,
         getChangeDate
       );
+      const currentDate = format(new Date(), 'yyyyMMdd');
       const fileName = patientName.trim() 
-        ? `Aligner_Labels_${patientName.trim()}.pdf`
+        ? `Aligner_Labels_${currentDate}_${patientName.trim()}.pdf`
         : 'aligner-labels.pdf';
       doc.save(fileName);
       toast({

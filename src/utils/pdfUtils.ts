@@ -30,7 +30,8 @@ export const generateLabelsPDF = (
 
   // Calculate centered margins
   const horizontalMargin = (pageWidth - totalWidthNeeded) / 2;
-  const verticalMargin = (pageHeight - totalHeightNeeded) / 2;
+  // Adjust vertical margin to account for printer offset
+  const verticalMargin = ((pageHeight - totalHeightNeeded) / 2) + 0.125; // Added 1/8 inch to move content down slightly
 
   let currentLabel = 0;
   let currentPage = 1;
@@ -50,19 +51,19 @@ export const generateLabelsPDF = (
 
     const changeDate = getChangeDate(startDate, changeFrequency, i);
 
-    // Draw label content
+    // Adjust vertical positioning of content within each label
     doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
-    doc.text('SMILEBAR', x + labelWidth/2, y + 0.3, { align: 'center' });
+    doc.text('SMILEBAR', x + labelWidth/2, y + 0.35, { align: 'center' });
     
     doc.setFontSize(16);
-    doc.text(format(changeDate, 'MMM d'), x + labelWidth/2, y + 0.6, { align: 'center' });
+    doc.text(format(changeDate, 'MMM d'), x + labelWidth/2, y + 0.65, { align: 'center' });
     
     doc.setFontSize(14);
-    doc.text(format(changeDate, 'yyyy'), x + labelWidth/2, y + 0.85, { align: 'center' });
+    doc.text(format(changeDate, 'yyyy'), x + labelWidth/2, y + 0.9, { align: 'center' });
     
     doc.setFontSize(14);
-    doc.text(`${i} of ${totalLabels}`, x + labelWidth/2, y + 1.1, { align: 'center' });
+    doc.text(`${i} of ${totalLabels}`, x + labelWidth/2, y + 1.15, { align: 'center' });
 
     currentLabel++;
   }

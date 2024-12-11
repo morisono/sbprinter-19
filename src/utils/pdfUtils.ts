@@ -24,6 +24,14 @@ export const generateLabelsPDF = (
   const labelsPerRow = Math.floor((pageWidth - 2 * margin) / labelWidth);
   const labelsPerColumn = Math.floor((pageHeight - 2 * margin) / labelHeight);
 
+  // Calculate the actual space needed for labels
+  const totalWidthNeeded = labelsPerRow * labelWidth;
+  const totalHeightNeeded = labelsPerColumn * labelHeight;
+
+  // Calculate centered margins
+  const horizontalMargin = (pageWidth - totalWidthNeeded) / 2;
+  const verticalMargin = (pageHeight - totalHeightNeeded) / 2;
+
   let currentLabel = 0;
   let currentPage = 1;
 
@@ -37,8 +45,8 @@ export const generateLabelsPDF = (
     const row = Math.floor(currentLabel / labelsPerRow);
     const col = currentLabel % labelsPerRow;
 
-    const x = margin + (col * labelWidth);
-    const y = margin + (row * labelHeight);
+    const x = horizontalMargin + (col * labelWidth);
+    const y = verticalMargin + (row * labelHeight);
 
     const changeDate = getChangeDate(startDate, changeFrequency, i);
 

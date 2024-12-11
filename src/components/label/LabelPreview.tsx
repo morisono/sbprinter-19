@@ -16,7 +16,7 @@ export const LabelPreview = ({
   getChangeDate
 }: LabelPreviewProps) => {
   return (
-    <div className="label-preview w-[1.25in] h-[1.25in] bg-white border-2 border-black border-dotted rounded-lg p-2 flex flex-col items-center justify-center space-y-0.5 my-4">
+    <div className="label-preview w-[1.5in] h-[1.5in] bg-white border-2 border-black border-dotted p-2 flex flex-col items-center justify-center space-y-0.5 my-4">
       <div className="text-sm font-bold uppercase tracking-wide">SMILEBAR</div>
       <div className="text-center">
         <div className="text-xl font-bold">

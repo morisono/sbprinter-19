@@ -41,7 +41,7 @@ export const LabelForm = () => {
       const currentDate = format(new Date(), 'yyyyMMdd');
       const fileName = patientName.trim() 
         ? `Aligner_Labels_${currentDate}_${patientName.trim()}.pdf`
-        : 'aligner-labels.pdf';
+        : `Aligner_Labels_${currentDate}.pdf`;
       doc.save(fileName);
       toast({
         title: "PDF Generated",

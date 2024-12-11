@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { format, addWeeks, parseISO } from "date-fns";
 import { useToast } from "@/components/ui/use-toast";
@@ -8,6 +8,8 @@ import { PreviewControls } from "./label/PreviewControls";
 import { LabelFormInputs } from "./label/LabelFormInputs";
 import { HelpSection } from "./label/HelpSection";
 import { handlePrinting } from "@/services/printHandler";
+import { generateLabelsPDF } from "@/utils/pdfUtils";
+import { Download } from "lucide-react";
 
 export const LabelForm = () => {
   const today = new Date();
@@ -51,6 +53,28 @@ export const LabelForm = () => {
     });
   };
 
+  const handleDownloadPDF = () => {
+    try {
+      const doc = generateLabelsPDF(
+        parseInt(totalAligners),
+        new Date(startDate),
+        changeFrequency,
+        getChangeDate
+      );
+      doc.save('aligner-labels.pdf');
+      toast({
+        title: "PDF Generated",
+        description: "Your labels PDF has been downloaded successfully.",
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "PDF Generation Failed",
+        description: "There was an error generating your PDF. Please try again.",
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen p-4 max-w-4xl mx-auto flex flex-col items-center justify-center">
       <div className="w-full text-center mb-8">
@@ -92,13 +116,21 @@ export const LabelForm = () => {
             </div>
           </div>
           
-          <div className="flex justify-center w-full">
+          <div className="flex justify-center w-full gap-4">
             <Button
               className="w-full md:w-auto px-8 border-black bg-black text-white hover:bg-gray-800"
               onClick={handlePrint}
               disabled={!totalAligners || !startDate}
             >
               Print All Labels
+            </Button>
+            <Button
+              className="w-full md:w-auto px-8 border-black bg-white text-black hover:bg-gray-100 flex items-center gap-2"
+              onClick={handleDownloadPDF}
+              disabled={!totalAligners || !startDate}
+            >
+              <Download className="w-4 h-4" />
+              Download PDF
             </Button>
           </div>
         </CardContent>

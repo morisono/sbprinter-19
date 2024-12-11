@@ -6,21 +6,42 @@ interface LabelFormInputsProps {
   totalAligners: string;
   startDate: string;
   changeFrequency: string;
+  patientName: string;
   onTotalAlignersChange: (value: string) => void;
   onStartDateChange: (value: string) => void;
   onChangeFrequencyChange: (value: string) => void;
+  onPatientNameChange: (value: string) => void;
 }
 
 export const LabelFormInputs = ({
   totalAligners,
   startDate,
   changeFrequency,
+  patientName,
   onTotalAlignersChange,
   onStartDateChange,
-  onChangeFrequencyChange
+  onChangeFrequencyChange,
+  onPatientNameChange
 }: LabelFormInputsProps) => {
+  const handlePatientNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Only allow alphanumeric characters, spaces, and common punctuation
+    const sanitizedValue = e.target.value.replace(/[^a-zA-Z0-9\s\-_\.]/g, '').slice(0, 30);
+    onPatientNameChange(sanitizedValue);
+  };
+
   return (
     <div className="space-y-4">
+      <div>
+        <Label htmlFor="patientName">Patient Name/Label (Optional)</Label>
+        <Input
+          id="patientName"
+          type="text"
+          value={patientName}
+          onChange={handlePatientNameChange}
+          placeholder="Enter patient name or label"
+          className="border-black bg-[#FFE4E1]"
+        />
+      </div>
       <div>
         <Label htmlFor="totalAligners">Number of Aligners</Label>
         <Input

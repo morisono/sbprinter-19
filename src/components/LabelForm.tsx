@@ -19,6 +19,7 @@ export const LabelForm = () => {
   const [changeFrequency, setChangeFrequency] = useState("weekly");
   const [currentPreview, setCurrentPreview] = useState(1);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
+  const [patientName, setPatientName] = useState("");
   const { toast } = useToast();
 
   const getChangeDate = (start: Date | string, frequency: string, alignerNumber: number) => {
@@ -37,7 +38,10 @@ export const LabelForm = () => {
         changeFrequency,
         getChangeDate
       );
-      doc.save('aligner-labels.pdf');
+      const fileName = patientName.trim() 
+        ? `Aligner_Labels_${patientName.trim()}.pdf`
+        : 'aligner-labels.pdf';
+      doc.save(fileName);
       toast({
         title: "PDF Generated",
         description: "Your labels PDF has been downloaded successfully.",
@@ -68,9 +72,11 @@ export const LabelForm = () => {
               totalAligners={totalAligners}
               startDate={startDate}
               changeFrequency={changeFrequency}
+              patientName={patientName}
               onTotalAlignersChange={setTotalAligners}
               onStartDateChange={setStartDate}
               onChangeFrequencyChange={setChangeFrequency}
+              onPatientNameChange={setPatientName}
             />
             
             <div className="flex flex-col items-center justify-center">

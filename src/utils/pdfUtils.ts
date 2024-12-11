@@ -53,16 +53,16 @@ export const generateLabelsPDF = (
     // Adjust vertical positioning of content within each label
     doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
-    doc.text('SMILEBAR', x + labelWidth/2, y + 0.4, { align: 'center' });
+    doc.text('SMILEBAR', x + labelWidth/2, y + 0.45, { align: 'center' });
     
     doc.setFontSize(16);
-    doc.text(format(changeDate, 'MMM d'), x + labelWidth/2, y + 0.7, { align: 'center' });
+    doc.text(format(changeDate, 'MMM d'), x + labelWidth/2, y + 0.75, { align: 'center' });
     
     doc.setFontSize(14);
-    doc.text(format(changeDate, 'yyyy'), x + labelWidth/2, y + 0.95, { align: 'center' });
+    doc.text(format(changeDate, 'yyyy'), x + labelWidth/2, y + 1.0, { align: 'center' });
     
     doc.setFontSize(14);
-    doc.text(`${i} of ${totalLabels}`, x + labelWidth/2, y + 1.2, { align: 'center' });
+    doc.text(`${i} of ${totalLabels}`, x + labelWidth/2, y + 1.25, { align: 'center' });
 
     currentLabel++;
   }

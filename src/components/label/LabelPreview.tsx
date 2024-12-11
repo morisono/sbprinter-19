@@ -1,5 +1,4 @@
 import { format } from "date-fns";
-import { PrinterType } from "@/utils/printerUtils";
 
 interface LabelPreviewProps {
   startDate: string;
@@ -7,7 +6,6 @@ interface LabelPreviewProps {
   currentPreview: number;
   totalAligners: string;
   getChangeDate: (start: Date | string, frequency: string, alignerNumber: number) => Date;
-  printerType: PrinterType;
 }
 
 export const LabelPreview = ({ 

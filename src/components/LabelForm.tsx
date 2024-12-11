@@ -7,7 +7,6 @@ import { LabelPreview } from "./label/LabelPreview";
 import { PreviewControls } from "./label/PreviewControls";
 import { LabelFormInputs } from "./label/LabelFormInputs";
 import { HelpSection } from "./label/HelpSection";
-import { handlePrinting } from "@/services/printHandler";
 import { generateLabelsPDF } from "@/utils/pdfUtils";
 import { Download } from "lucide-react";
 
@@ -28,29 +27,6 @@ export const LabelForm = () => {
                  frequency === "biweekly" ? (alignerNumber - 1) * 2 : 
                  (alignerNumber - 1) * 4;
     return addWeeks(startDate, weeks);
-  };
-
-  const handlePrint = async () => {
-    await handlePrinting({
-      printerType: 'zebra',
-      totalLabels: parseInt(totalAligners),
-      startDate: new Date(startDate),
-      changeFrequency,
-      getChangeDate,
-      onSuccess: (message) => {
-        toast({
-          title: "Print Success",
-          description: message,
-        });
-      },
-      onError: (title, description) => {
-        toast({
-          variant: "destructive",
-          title,
-          description,
-        });
-      }
-    });
   };
 
   const handleDownloadPDF = () => {
@@ -104,7 +80,6 @@ export const LabelForm = () => {
                 currentPreview={currentPreview}
                 totalAligners={totalAligners}
                 getChangeDate={getChangeDate}
-                printerType="zebra"
               />
               
               <PreviewControls
@@ -116,14 +91,7 @@ export const LabelForm = () => {
             </div>
           </div>
           
-          <div className="flex justify-center w-full gap-4">
-            <Button
-              className="w-full md:w-auto px-8 border-black bg-black text-white hover:bg-gray-800"
-              onClick={handlePrint}
-              disabled={!totalAligners || !startDate}
-            >
-              Print All Labels
-            </Button>
+          <div className="flex justify-center w-full">
             <Button
               className="w-full md:w-auto px-8 border-black bg-white text-black hover:bg-gray-100 flex items-center gap-2"
               onClick={handleDownloadPDF}

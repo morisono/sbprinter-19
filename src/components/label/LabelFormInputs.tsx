@@ -32,7 +32,7 @@ export const LabelFormInputs = ({
   return (
     <div className="space-y-4 pt-4">
       <div>
-        <Label htmlFor="patientName">Patient Name/Note for filename (Optional)</Label>
+        <Label htmlFor="patientName">Patient Name/Note for Filename (Optional)</Label>
         <Input
           id="patientName"
           type="text"

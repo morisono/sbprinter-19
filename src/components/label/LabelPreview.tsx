@@ -16,18 +16,20 @@ export const LabelPreview = ({
   getChangeDate
 }: LabelPreviewProps) => {
   return (
-    <div className="label-preview w-[1.5in] h-[1.5in] bg-white border-2 border-black border-dotted p-2 flex flex-col items-center justify-center space-y-0.5 my-4">
-      <div className="text-sm font-bold uppercase tracking-wide">SMILEBAR</div>
-      <div className="text-center">
-        <div className="text-xl font-bold">
-          {startDate ? format(getChangeDate(startDate, changeFrequency, currentPreview), "MMM d") : "Select date"}
+    <div className="label-preview w-[1.5in] h-[1.5in] bg-white border-2 border-black border-dotted flex flex-col items-center justify-center my-4">
+      <div className="flex flex-col items-center justify-center h-full space-y-1 py-2">
+        <div className="text-sm font-bold uppercase tracking-wide">SMILEBAR</div>
+        <div className="text-center">
+          <div className="text-xl font-bold">
+            {startDate ? format(getChangeDate(startDate, changeFrequency, currentPreview), "MMM d") : "Select date"}
+          </div>
+          <div className="text-lg leading-none">
+            {startDate ? format(getChangeDate(startDate, changeFrequency, currentPreview), "yyyy") : ""}
+          </div>
         </div>
-        <div className="text-lg leading-none">
-          {startDate ? format(getChangeDate(startDate, changeFrequency, currentPreview), "yyyy") : ""}
+        <div className="text-lg font-semibold">
+          {currentPreview} of {totalAligners || "?"}
         </div>
-      </div>
-      <div className="text-lg font-semibold">
-        {currentPreview} of {totalAligners || "?"}
       </div>
     </div>
   );

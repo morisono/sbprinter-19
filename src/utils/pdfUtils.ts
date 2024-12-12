@@ -33,8 +33,9 @@ export const generateLabelsPDF = (
   const horizontalMargin = (pageWidth - totalWidthNeeded) / 2;
   const verticalMargin = (pageHeight - totalHeightNeeded) / 2;
 
-  // Adjust starting position (1-based index)
-  let currentLabel = startingPosition - 1;
+  // Calculate starting row based on startingPosition
+  const selectedRow = Math.ceil(startingPosition / 4) - 1;
+  let currentLabel = selectedRow * labelsPerRow;
   let currentPage = Math.floor(currentLabel / (labelsPerRow * labelsPerColumn));
   currentLabel = currentLabel % (labelsPerRow * labelsPerColumn);
 

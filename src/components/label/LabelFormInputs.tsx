@@ -32,12 +32,11 @@ export const LabelFormInputs = ({
     onPatientNameChange(sanitizedValue);
   };
 
-  // Generate options for starting positions (6 rows × 4 columns = 24 positions)
-  const positions = Array.from({ length: 24 }, (_, i) => {
-    const row = Math.floor(i / 4) + 1;
-    const position = (i % 4) + 1;
-    return { value: i + 1, label: `Row ${row}, Position ${position}` };
-  });
+  // Generate options for starting rows (6 rows)
+  const rows = Array.from({ length: 6 }, (_, i) => ({
+    value: (i * 4) + 1,  // First position of each row
+    label: `Start at Row ${i + 1}`
+  }));
 
   return (
     <div className="space-y-4 pt-4">
@@ -87,18 +86,18 @@ export const LabelFormInputs = ({
         </Select>
       </div>
       <div>
-        <Label htmlFor="startingPosition">Starting Position on Page</Label>
+        <Label htmlFor="startingPosition">Starting Row on Page</Label>
         <Select 
           value={startingPosition.toString()} 
           onValueChange={(value) => onStartingPositionChange(parseInt(value))}
         >
           <SelectTrigger className="border-black bg-[#FFE4E1]">
-            <SelectValue placeholder="Select starting position" />
+            <SelectValue placeholder="Select starting row" />
           </SelectTrigger>
           <SelectContent>
-            {positions.map((pos) => (
-              <SelectItem key={pos.value} value={pos.value.toString()}>
-                {pos.label}
+            {rows.map((row) => (
+              <SelectItem key={row.value} value={row.value.toString()}>
+                {row.label}
               </SelectItem>
             ))}
           </SelectContent>

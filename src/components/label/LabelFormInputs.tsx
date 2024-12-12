@@ -32,8 +32,8 @@ export const LabelFormInputs = ({
     onPatientNameChange(sanitizedValue);
   };
 
-  // Generate options for starting rows (6 rows)
-  const rows = Array.from({ length: 6 }, (_, i) => ({
+  // Generate options for starting rows (7 rows)
+  const rows = Array.from({ length: 7 }, (_, i) => ({
     value: (i * 4) + 1,  // First position of each row
     label: `Start at Row ${i + 1}`
   }));

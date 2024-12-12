@@ -5,7 +5,8 @@ export const generateLabelsPDF = (
   totalLabels: number,
   startDate: Date,
   changeFrequency: string,
-  getChangeDate: (start: Date, frequency: string, alignerNumber: number) => Date
+  getChangeDate: (start: Date, frequency: string, alignerNumber: number) => Date,
+  startingPosition: number = 1
 ) => {
   const doc = new jsPDF({
     orientation: 'portrait',
@@ -32,13 +33,20 @@ export const generateLabelsPDF = (
   const horizontalMargin = (pageWidth - totalWidthNeeded) / 2;
   const verticalMargin = (pageHeight - totalHeightNeeded) / 2;
 
-  let currentLabel = 0;
-  let currentPage = 1;
+  // Adjust starting position (1-based index)
+  let currentLabel = startingPosition - 1;
+  let currentPage = Math.floor(currentLabel / (labelsPerRow * labelsPerColumn));
+  currentLabel = currentLabel % (labelsPerRow * labelsPerColumn);
+
+  if (currentPage > 0) {
+    for (let i = 0; i < currentPage; i++) {
+      doc.addPage();
+    }
+  }
 
   for (let i = 1; i <= totalLabels; i++) {
     if (currentLabel >= labelsPerRow * labelsPerColumn) {
       doc.addPage();
-      currentPage++;
       currentLabel = 0;
     }
 

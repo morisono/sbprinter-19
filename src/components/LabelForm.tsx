@@ -20,6 +20,7 @@ export const LabelForm = () => {
   const [currentPreview, setCurrentPreview] = useState(1);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [patientName, setPatientName] = useState("");
+  const [startingPosition, setStartingPosition] = useState(1);
   const { toast } = useToast();
 
   const getChangeDate = (start: Date | string, frequency: string, alignerNumber: number) => {
@@ -36,7 +37,8 @@ export const LabelForm = () => {
         parseInt(totalAligners),
         new Date(startDate),
         changeFrequency,
-        getChangeDate
+        getChangeDate,
+        startingPosition
       );
       const currentDate = format(new Date(), 'yyyyMMdd');
       const fileName = patientName.trim() 
@@ -74,10 +76,12 @@ export const LabelForm = () => {
               startDate={startDate}
               changeFrequency={changeFrequency}
               patientName={patientName}
+              startingPosition={startingPosition}
               onTotalAlignersChange={setTotalAligners}
               onStartDateChange={setStartDate}
               onChangeFrequencyChange={setChangeFrequency}
               onPatientNameChange={setPatientName}
+              onStartingPositionChange={setStartingPosition}
             />
             
             <div className="flex flex-col items-center justify-center">

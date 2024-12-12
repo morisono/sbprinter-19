@@ -32,11 +32,11 @@ export const LabelFormInputs = ({
     onPatientNameChange(sanitizedValue);
   };
 
-  // Generate options for starting positions (4 rows × 4 columns = 16 positions)
-  const positions = Array.from({ length: 16 }, (_, i) => {
+  // Generate options for starting positions (6 rows × 4 columns = 24 positions)
+  const positions = Array.from({ length: 24 }, (_, i) => {
     const row = Math.floor(i / 4) + 1;
-    const col = (i % 4) + 1;
-    return { value: i + 1, label: `Row ${row}, Label ${col}` };
+    const position = (i % 4) + 1;
+    return { value: i + 1, label: `Row ${row}, Position ${position}` };
   });
 
   return (

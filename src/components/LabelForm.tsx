@@ -45,10 +45,7 @@ export const LabelForm = () => {
         ? `Aligner_Labels_${currentDate}_${patientName.trim()}.pdf`
         : `Aligner_Labels_${currentDate}.pdf`;
       doc.save(fileName);
-      toast({
-        title: "PDF Generated",
-        description: "Your labels PDF has been downloaded successfully.",
-      });
+      // Removed toast notification
     } catch (error) {
       toast({
         variant: "destructive",

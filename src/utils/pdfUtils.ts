@@ -19,53 +19,49 @@ export const generateLabelsPDF = (
   const labelHeight = 1.5;
   const pageWidth = 8.5;
   const pageHeight = 11;
-  const margin = 0.25;
 
-  // Calculate labels per row and column
-  const labelsPerRow = 4; // Fixed at 4 labels per row
-  const labelsPerColumn = 7; // Fixed at 7 rows per page
+  // Fixed dimensions for label sheet
+  const labelsPerRow = 4;
+  const labelsPerColumn = 7;
   const labelsPerPage = labelsPerRow * labelsPerColumn;
 
-  // Calculate the actual space needed for labels
+  // Calculate margins to center labels on page
   const totalWidthNeeded = labelsPerRow * labelWidth;
   const totalHeightNeeded = labelsPerColumn * labelHeight;
-
-  // Calculate centered margins
   const horizontalMargin = (pageWidth - totalWidthNeeded) / 2;
   const verticalMargin = (pageHeight - totalHeightNeeded) / 2;
 
-  // Calculate starting position
-  const startRow = Math.ceil(startingPosition / labelsPerRow) - 1; // 0-based row index
-  const startCol = (startingPosition - 1) % labelsPerRow; // 0-based column index
-  let currentPosition = startRow * labelsPerRow + startCol;
+  // Adjust startingPosition to be 0-based
+  const adjustedStartingPosition = startingPosition - 1;
 
-  // Calculate which page to start on
-  let currentPage = Math.floor(currentPosition / labelsPerPage);
+  // Calculate initial row and column
+  let currentRow = Math.floor(adjustedStartingPosition / labelsPerRow);
+  let currentCol = adjustedStartingPosition % labelsPerRow;
+  
+  // Calculate initial page
+  let currentPage = Math.floor(currentRow / labelsPerColumn);
+  
+  // Add pages if needed
   if (currentPage > 0) {
+    currentRow = currentRow % labelsPerColumn;
     for (let i = 0; i < currentPage; i++) {
       doc.addPage();
     }
   }
 
-  // Adjust currentPosition to be relative to the current page
-  currentPosition = currentPosition % labelsPerPage;
-
   for (let i = 1; i <= totalLabels; i++) {
-    // Calculate current row and column on the current page
-    const row = Math.floor(currentPosition / labelsPerRow);
-    const col = currentPosition % labelsPerRow;
-
-    // Add new page if needed
-    if (row >= labelsPerColumn) {
+    // Check if we need a new page
+    if (currentRow >= labelsPerColumn) {
       doc.addPage();
-      currentPosition = 0;
-      const row = 0;
-      const col = 0;
+      currentRow = 0;
+      currentCol = 0;
     }
 
-    const x = horizontalMargin + (col * labelWidth);
-    const y = verticalMargin + (row * labelHeight);
+    // Calculate position on page
+    const x = horizontalMargin + (currentCol * labelWidth);
+    const y = verticalMargin + (currentRow * labelHeight);
 
+    // Get change date for current aligner
     const changeDate = getChangeDate(startDate, changeFrequency, i);
 
     // Draw label content
@@ -82,7 +78,12 @@ export const generateLabelsPDF = (
     doc.setFontSize(14);
     doc.text(`${i} of ${totalLabels}`, x + labelWidth/2, y + 1.15, { align: 'center' });
 
-    currentPosition++;
+    // Move to next position
+    currentCol++;
+    if (currentCol >= labelsPerRow) {
+      currentCol = 0;
+      currentRow++;
+    }
   }
 
   return doc;

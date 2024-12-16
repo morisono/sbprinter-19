@@ -32,21 +32,24 @@ export const LabelFormInputs = ({
     onPatientNameChange(sanitizedValue);
   };
 
-  // Generate options for starting rows (7 rows)
+  // Calculate current row and position
+  const currentRow = Math.ceil(startingPosition / 4);
+  const currentPosition = ((startingPosition - 1) % 4) + 1;
+
+  // Generate options for rows (7 rows)
   const rows = Array.from({ length: 7 }, (_, i) => ({
-    value: (i * 4) + 1,  // First position of each row
+    value: i + 1,
     label: `Row ${i + 1}`
   }));
 
-  // Generate options for label positions (1-5)
-  const labelPositions = Array.from({ length: 5 }, (_, i) => ({
+  // Generate options for positions (1-4)
+  const positions = Array.from({ length: 4 }, (_, i) => ({
     value: i + 1,
     label: `Label ${i + 1}`
   }));
 
-  const calculateStartingPosition = (row: number, label: number) => {
-    const basePosition = Math.floor((row - 1) / 1) * 4;
-    return basePosition + label;
+  const calculateStartingPosition = (row: number, position: number) => {
+    return ((row - 1) * 4) + position;
   };
 
   return (
@@ -89,7 +92,7 @@ export const LabelFormInputs = ({
           <SelectTrigger className="border-black bg-[#FFE4E1]">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-white">
             <SelectItem value="weekly">Weekly</SelectItem>
             <SelectItem value="biweekly">Bi-weekly</SelectItem>
             <SelectItem value="monthly">Monthly</SelectItem>
@@ -100,17 +103,16 @@ export const LabelFormInputs = ({
         <div className="w-1/2">
           <Label htmlFor="startingRow">Starting Row</Label>
           <Select 
-            value={Math.ceil(startingPosition / 4).toString()}
+            value={currentRow.toString()}
             onValueChange={(value) => {
-              const row = parseInt(value);
-              const label = ((startingPosition - 1) % 4) + 1;
-              onStartingPositionChange(calculateStartingPosition(row, label));
+              const newRow = parseInt(value);
+              onStartingPositionChange(calculateStartingPosition(newRow, currentPosition));
             }}
           >
             <SelectTrigger className="border-black bg-[#FFE4E1]">
               <SelectValue placeholder="Select row" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-white">
               {rows.map((row) => (
                 <SelectItem key={row.value} value={row.value.toString()}>
                   {row.label}
@@ -122,18 +124,17 @@ export const LabelFormInputs = ({
         <div className="w-1/2">
           <Label htmlFor="startingLabel">Starting Label</Label>
           <Select 
-            value={((startingPosition - 1) % 4 + 1).toString()}
+            value={currentPosition.toString()}
             onValueChange={(value) => {
-              const label = parseInt(value);
-              const row = Math.ceil(startingPosition / 4);
-              onStartingPositionChange(calculateStartingPosition(row, label));
+              const newPosition = parseInt(value);
+              onStartingPositionChange(calculateStartingPosition(currentRow, newPosition));
             }}
           >
             <SelectTrigger className="border-black bg-[#FFE4E1]">
               <SelectValue placeholder="Select label" />
             </SelectTrigger>
-            <SelectContent>
-              {labelPositions.map((pos) => (
+            <SelectContent className="bg-white">
+              {positions.map((pos) => (
                 <SelectItem key={pos.value} value={pos.value.toString()}>
                   {pos.label}
                 </SelectItem>

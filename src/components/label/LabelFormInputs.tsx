@@ -33,8 +33,8 @@ export const LabelFormInputs = ({
   };
 
   // Calculate current row and position
-  const currentRow = Math.ceil(startingPosition / 4);
-  const currentPosition = ((startingPosition - 1) % 4) + 1;
+  const currentRow = Math.ceil(startingPosition / 5);
+  const currentPosition = ((startingPosition - 1) % 5) + 1;
 
   // Generate options for rows (7 rows)
   const rows = Array.from({ length: 7 }, (_, i) => ({
@@ -42,14 +42,14 @@ export const LabelFormInputs = ({
     label: `Row ${i + 1}`
   }));
 
-  // Generate options for positions (1-4)
-  const positions = Array.from({ length: 4 }, (_, i) => ({
+  // Generate options for positions (1-5)
+  const positions = Array.from({ length: 5 }, (_, i) => ({
     value: i + 1,
     label: `Label ${i + 1}`
   }));
 
   const calculateStartingPosition = (row: number, position: number) => {
-    return ((row - 1) * 4) + position;
+    return ((row - 1) * 5) + position;
   };
 
   return (

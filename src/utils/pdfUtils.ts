@@ -21,7 +21,7 @@ export const generateLabelsPDF = (
   const pageHeight = 11;
 
   // Fixed dimensions
-  const labelsPerRow = 4;
+  const labelsPerRow = 5;
   const labelsPerColumn = 7;
   const labelsPerPage = labelsPerRow * labelsPerColumn;
 

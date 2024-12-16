@@ -22,8 +22,9 @@ export const generateLabelsPDF = (
   const margin = 0.25;
 
   // Calculate labels per row and column
-  const labelsPerRow = Math.floor((pageWidth - 2 * margin) / labelWidth);
-  const labelsPerColumn = Math.floor((pageHeight - 2 * margin) / labelHeight);
+  const labelsPerRow = 4; // Fixed at 4 labels per row
+  const labelsPerColumn = 7; // Fixed at 7 rows per page
+  const labelsPerPage = labelsPerRow * labelsPerColumn;
 
   // Calculate the actual space needed for labels
   const totalWidthNeeded = labelsPerRow * labelWidth;
@@ -33,33 +34,41 @@ export const generateLabelsPDF = (
   const horizontalMargin = (pageWidth - totalWidthNeeded) / 2;
   const verticalMargin = (pageHeight - totalHeightNeeded) / 2;
 
-  // Calculate starting row based on startingPosition
-  const selectedRow = Math.ceil(startingPosition / 4) - 1;
-  let currentLabel = selectedRow * labelsPerRow;
-  let currentPage = Math.floor(currentLabel / (labelsPerRow * labelsPerColumn));
-  currentLabel = currentLabel % (labelsPerRow * labelsPerColumn);
+  // Calculate starting position
+  const startRow = Math.ceil(startingPosition / labelsPerRow) - 1; // 0-based row index
+  const startCol = (startingPosition - 1) % labelsPerRow; // 0-based column index
+  let currentPosition = startRow * labelsPerRow + startCol;
 
+  // Calculate which page to start on
+  let currentPage = Math.floor(currentPosition / labelsPerPage);
   if (currentPage > 0) {
     for (let i = 0; i < currentPage; i++) {
       doc.addPage();
     }
   }
 
-  for (let i = 1; i <= totalLabels; i++) {
-    if (currentLabel >= labelsPerRow * labelsPerColumn) {
-      doc.addPage();
-      currentLabel = 0;
-    }
+  // Adjust currentPosition to be relative to the current page
+  currentPosition = currentPosition % labelsPerPage;
 
-    const row = Math.floor(currentLabel / labelsPerRow);
-    const col = currentLabel % labelsPerRow;
+  for (let i = 1; i <= totalLabels; i++) {
+    // Calculate current row and column on the current page
+    const row = Math.floor(currentPosition / labelsPerRow);
+    const col = currentPosition % labelsPerRow;
+
+    // Add new page if needed
+    if (row >= labelsPerColumn) {
+      doc.addPage();
+      currentPosition = 0;
+      const row = 0;
+      const col = 0;
+    }
 
     const x = horizontalMargin + (col * labelWidth);
     const y = verticalMargin + (row * labelHeight);
 
     const changeDate = getChangeDate(startDate, changeFrequency, i);
 
-    // Adjust vertical positioning of content within each label
+    // Draw label content
     doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
     doc.text('SMILEBAR', x + labelWidth/2, y + 0.35, { align: 'center' });
@@ -73,7 +82,7 @@ export const generateLabelsPDF = (
     doc.setFontSize(14);
     doc.text(`${i} of ${totalLabels}`, x + labelWidth/2, y + 1.15, { align: 'center' });
 
-    currentLabel++;
+    currentPosition++;
   }
 
   return doc;

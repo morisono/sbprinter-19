@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { format, addWeeks, parseISO, startOfDay } from "date-fns";
+import { format, addWeeks, parseISO } from "date-fns";
 import { useToast } from "@/components/ui/use-toast";
 import { LabelPreview } from "./label/LabelPreview";
 import { PreviewControls } from "./label/PreviewControls";
@@ -24,13 +24,12 @@ export const LabelForm = () => {
   const { toast } = useToast();
 
   const getChangeDate = (start: Date | string, frequency: string, alignerNumber: number) => {
-    const parsedDate = typeof start === 'string' ? parseISO(start) : start;
-    const baseDate = startOfDay(parsedDate);
+    const startDate = typeof start === 'string' ? parseISO(start) : start;
     
     const weeks = frequency === "weekly" ? alignerNumber - 1 : 
                  frequency === "biweekly" ? (alignerNumber - 1) * 2 : 
                  (alignerNumber - 1) * 4;
-    return addWeeks(baseDate, weeks);
+    return addWeeks(startDate, weeks);
   };
 
   const handleDownloadPDF = () => {
@@ -119,4 +118,3 @@ export const LabelForm = () => {
       </div>
     </div>
   );
-};

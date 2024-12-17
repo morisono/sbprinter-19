@@ -12,6 +12,7 @@ import { Download } from "lucide-react";
 
 export const LabelForm = () => {
   const today = new Date();
+  today.setHours(0, 0, 0, 0); // Reset time to midnight
   const formattedToday = format(today, "yyyy-MM-dd");
   
   const [totalAligners, setTotalAligners] = useState("12");
@@ -24,7 +25,15 @@ export const LabelForm = () => {
   const { toast } = useToast();
 
   const getChangeDate = (start: Date | string, frequency: string, alignerNumber: number) => {
-    const startDate = typeof start === 'string' ? parseISO(start) : start;
+    let startDate: Date;
+    
+    if (typeof start === 'string') {
+      startDate = parseISO(start);
+      startDate.setHours(0, 0, 0, 0); // Reset time to midnight
+    } else {
+      startDate = start;
+      startDate.setHours(0, 0, 0, 0); // Reset time to midnight
+    }
     
     const weeks = frequency === "weekly" ? alignerNumber - 1 : 
                  frequency === "biweekly" ? (alignerNumber - 1) * 2 : 
@@ -34,9 +43,12 @@ export const LabelForm = () => {
 
   const handleDownloadPDF = () => {
     try {
+      const parsedStartDate = parseISO(startDate);
+      parsedStartDate.setHours(0, 0, 0, 0); // Reset time to midnight
+      
       const doc = generateLabelsPDF(
         parseInt(totalAligners),
-        new Date(startDate),
+        parsedStartDate,
         changeFrequency,
         getChangeDate,
         startingPosition
@@ -46,7 +58,6 @@ export const LabelForm = () => {
         ? `Aligner_Labels_${currentDate}_${patientName.trim()}.pdf`
         : `Aligner_Labels_${currentDate}.pdf`;
       doc.save(fileName);
-      // Removed toast notification
     } catch (error) {
       toast({
         variant: "destructive",

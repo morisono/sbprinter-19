@@ -25,10 +25,13 @@ export const LabelForm = () => {
 
   const getChangeDate = (start: Date | string, frequency: string, alignerNumber: number) => {
     const startDate = typeof start === 'string' ? parseISO(start) : start;
+    const normalizedStartDate = new Date(startDate);
+    normalizedStartDate.setHours(12, 0, 0, 0);
+    
     const weeks = frequency === "weekly" ? alignerNumber - 1 : 
                  frequency === "biweekly" ? (alignerNumber - 1) * 2 : 
                  (alignerNumber - 1) * 4;
-    return addWeeks(startDate, weeks);
+    return addWeeks(normalizedStartDate, weeks);
   };
 
   const handleDownloadPDF = () => {

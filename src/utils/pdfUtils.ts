@@ -1,5 +1,5 @@
 import jsPDF from 'jspdf';
-import { format } from 'date-fns';
+import { format, startOfDay } from 'date-fns';
 
 export const generateLabelsPDF = (
   totalLabels: number,
@@ -62,10 +62,9 @@ export const generateLabelsPDF = (
     const x = horizontalMargin + (col * labelWidth);
     const y = verticalMargin + (row * labelHeight);
 
-    // Normalize the start date to noon
-    const normalizedStartDate = new Date(startDate);
-    normalizedStartDate.setHours(12, 0, 0, 0);
-    const changeDate = getChangeDate(normalizedStartDate, changeFrequency, i);
+    // Normalize the start date to the start of the day
+    const baseDate = startOfDay(startDate);
+    const changeDate = getChangeDate(baseDate, changeFrequency, i);
 
     // Draw label content
     doc.setFontSize(12);

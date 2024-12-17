@@ -63,7 +63,10 @@ export const generateLabelsPDF = (
     const y = verticalMargin + (row * labelHeight);
 
     // Get change date for current aligner
-    const changeDate = getChangeDate(startDate, changeFrequency, i);
+    // Set the hours to noon (12:00) to avoid timezone issues
+    const adjustedStartDate = new Date(startDate);
+    adjustedStartDate.setHours(12, 0, 0, 0);
+    const changeDate = getChangeDate(adjustedStartDate, changeFrequency, i);
 
     // Draw label content
     doc.setFontSize(12);

@@ -150,12 +150,6 @@ export const LabelFormInputs = ({
         onLanguageChange={onLanguageChange}
       />
 
-      {/* QR Code Section */}
-      <QRCodeSection
-        qrText={qrText}
-        onQRTextChange={onQRTextChange}
-      />
-
       {/* Date and Frequency Controls */}
       <div>
         <Label htmlFor="startDate">Start Date</Label>
@@ -181,6 +175,8 @@ export const LabelFormInputs = ({
           </SelectContent>
         </Select>
       </div>
+
+      {/* Starting Position Controls */}
       <div className="flex gap-4">
         <div className="w-1/2">
           <Label htmlFor="startingRow">Starting Row</Label>
@@ -225,6 +221,12 @@ export const LabelFormInputs = ({
           </Select>
         </div>
       </div>
+
+      {/* QR Code Section (moved to bottom) */}
+      <QRCodeSection
+        qrText={qrText}
+        onQRTextChange={onQRTextChange}
+      />
     </div>
   );
 };

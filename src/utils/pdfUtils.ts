@@ -16,6 +16,9 @@ const SIZES = {
   card: { width: 85.6, height: 54, cols: 2, rows: 5, orientation: 'portrait' }
 };
 
+// Margin in mm
+const MARGIN = 3;
+
 export const generateLabelsPDF = async (
   totalLabels: number,
   startDate: Date,
@@ -32,10 +35,13 @@ export const generateLabelsPDF = async (
     format: 'a4'
   });
 
-  // Load the appropriate font based on language
+  // Load fonts based on language
   if (options.selectedLanguage === 'ja-JP') {
-    doc.addFont('NotoSansCJKjp-Regular.ttf', 'Noto Sans CJK JP', 'normal');
-    doc.setFont('Noto Sans CJK JP');
+    await doc.addFont('https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-jp@5.0.1/files/noto-sans-jp-japanese-400-normal.woff', 'Noto Sans JP', 'normal');
+    doc.setFont('Noto Sans JP');
+  } else if (options.selectedLanguage === 'zh-CN') {
+    await doc.addFont('https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.0.1/files/noto-sans-sc-chinese-simplified-400-normal.woff', 'Noto Sans SC', 'normal');
+    doc.setFont('Noto Sans SC');
   }
 
   // A4 dimensions
@@ -67,10 +73,12 @@ export const generateLabelsPDF = async (
   // Adjust position for current page
   position = position % labelsPerPage;
 
+  // Calculate items per group correctly
+  const itemsPerGroup = Math.ceil(totalLabels / options.numberOfGroups);
+
   for (let i = 1; i <= totalLabels; i++) {
     // Calculate group numbers
-    const groupNumber = Math.ceil(i / (totalLabels / options.numberOfGroups));
-    const itemsPerGroup = Math.ceil(totalLabels / options.numberOfGroups);
+    const groupNumber = Math.ceil(i / itemsPerGroup);
     const itemInGroup = ((i - 1) % itemsPerGroup) + 1;
 
     // Calculate current row and column within the current page
@@ -85,44 +93,55 @@ export const generateLabelsPDF = async (
       col = 0;
     }
 
-    // Calculate x and y coordinates for the current label
-    const x = horizontalMargin + (col * size.width);
-    const y = verticalMargin + (row * size.height);
+    // Calculate x and y coordinates for the current label with margins
+    const x = horizontalMargin + (col * size.width) + MARGIN;
+    const y = verticalMargin + (row * size.height) + MARGIN;
 
-    const changeDate = getChangeDate(startDate, changeFrequency, i);
+    // Calculate effective width and height considering margins
+    const effectiveWidth = size.width - (2 * MARGIN);
+    const effectiveHeight = size.height - (2 * MARGIN);
 
-    // Draw label border
-    doc.rect(x, y, size.width, size.height);
+    // Draw label border (optional, for debugging)
+    // doc.rect(x - MARGIN, y - MARGIN, size.width, size.height);
 
     // Set font configurations
     doc.setFontSize(8);
 
-    // Draw title
-    doc.text(options.title || 'SMILEBAR', x + size.width/2, y + 4, { align: 'center' });
+    // Draw title (left-aligned)
+    doc.text(options.title || 'SMILEBAR', x, y + 4, { align: 'left' });
 
-    // Draw date
-    doc.text(format(changeDate, 'yyyy/MM/dd'), x + size.width/2, y + 8, { align: 'center' });
+    // Calculate the date based on group number
+    const changeDate = getChangeDate(startDate, changeFrequency, ((groupNumber - 1) * itemsPerGroup) + itemInGroup);
+    
+    // Draw date (left-aligned)
+    doc.text(format(changeDate, 'yyyy/MM/dd'), x, y + 8, { align: 'left' });
 
-    // Draw position number
+    // Draw position number (left-aligned)
     const positionText = options.numberOfGroups === 1
       ? `${i} of ${totalLabels}`
       : `${groupNumber}.${itemInGroup} of ${options.numberOfGroups}.${itemsPerGroup}`;
-    doc.text(positionText, x + size.width/2, y + 12, { align: 'center' });
+    doc.text(positionText, x, y + 12, { align: 'left' });
 
-    // Add QR code if text is available
+    // Add QR code if text is available (half size)
     if (options.qrText[i - 1]) {
-      const qrDataUrl = await QRCode.toDataURL(options.qrText[i - 1], {
-        width: size.height * 0.8,
-        margin: 0
-      });
-      doc.addImage(
-        qrDataUrl,
-        'PNG',
-        x + size.width - (size.height * 0.9),
-        y + (size.height * 0.1),
-        size.height * 0.8,
-        size.height * 0.8
-      );
+      try {
+        const qrDataUrl = await QRCode.toDataURL(options.qrText[i - 1], {
+          width: effectiveHeight * 0.4, // Make QR code half the size
+          margin: 0
+        });
+        
+        const qrSize = effectiveHeight * 0.4;
+        doc.addImage(
+          qrDataUrl,
+          'PNG',
+          x + effectiveWidth - qrSize,
+          y,
+          qrSize,
+          qrSize
+        );
+      } catch (error) {
+        console.error('Failed to generate QR code:', error);
+      }
     }
 
     // Move to next position

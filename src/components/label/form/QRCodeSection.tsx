@@ -1,6 +1,6 @@
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { QRCode } from "react-qr-code";
+import QRCode from "react-qr-code";
 
 interface QRCodeSectionProps {
   qrText: string;

@@ -9,23 +9,25 @@ export const generateLabelsPDF = (
   startingPosition: number = 1
 ) => {
   const doc = new jsPDF({
-    orientation: 'portrait',
-    unit: 'in',
-    format: 'letter'
+    orientation: 'landscape',
+    unit: 'mm',
+    format: 'a4'
   });
 
-  // Label dimensions (1.5" x 1.5")
-  const labelWidth = 1.5;
-  const labelHeight = 1.5;
-  const pageWidth = 8.5;
-  const pageHeight = 11;
+  // A4 dimensions in mm (landscape)
+  const pageWidth = 297;
+  const pageHeight = 210;
 
-  // Fixed dimensions
+  // Label dimensions (48x24 mm as specified)
+  const labelWidth = 48;
+  const labelHeight = 24;
+
+  // Grid configuration
   const labelsPerRow = 5;
   const labelsPerColumn = 7;
   const labelsPerPage = labelsPerRow * labelsPerColumn;
 
-  // Calculate margins to center labels
+  // Calculate margins to center the grid on the page
   const totalWidthNeeded = labelsPerRow * labelWidth;
   const totalHeightNeeded = labelsPerColumn * labelHeight;
   const horizontalMargin = (pageWidth - totalWidthNeeded) / 2;
@@ -64,19 +66,39 @@ export const generateLabelsPDF = (
 
     const changeDate = getChangeDate(startDate, changeFrequency, i);
 
+    // Draw label border
+    doc.rect(x, y, labelWidth, labelHeight);
+
+    // Set font configurations
+    doc.setFont('helvetica');
+    doc.setFontSize(8);
+
     // Draw label content
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.text('SMILEBAR', x + labelWidth/2, y + 0.35, { align: 'center' });
-    
-    doc.setFontSize(16);
-    doc.text(format(changeDate, 'MMM d'), x + labelWidth/2, y + 0.65, { align: 'center' });
-    
-    doc.setFontSize(14);
-    doc.text(format(changeDate, 'yyyy'), x + labelWidth/2, y + 0.9, { align: 'center' });
-    
-    doc.setFontSize(14);
-    doc.text(`${i} of ${totalLabels}`, x + labelWidth/2, y + 1.15, { align: 'center' });
+    const textX = x + labelWidth/2;
+    const baseY = y + 6;
+    const lineHeight = 4;
+
+    // Draw text content
+    doc.text('用法1日', x + 4, baseY);
+    doc.text('回', x + labelWidth/2, baseY);
+    doc.text('日分', x + labelWidth - 8, baseY);
+
+    doc.text('食後・後・間', x + 4, baseY + lineHeight);
+    doc.text('時間毎服用', x + labelWidth - 12, baseY + lineHeight);
+
+    // Draw date
+    doc.text(format(changeDate, 'yyyy'), x + 4, baseY + lineHeight * 2);
+    doc.text(format(changeDate, 'MM'), x + labelWidth/2 - 8, baseY + lineHeight * 2);
+    doc.text(format(changeDate, 'dd'), x + labelWidth - 12, baseY + lineHeight * 2);
+
+    // Draw warning text (smaller font)
+    doc.setFontSize(6);
+    doc.text('※小児の手のとどかない、', x + 4, baseY + lineHeight * 3);
+    doc.text('日除又は冷蔵庫に保管して下さい', x + 4, baseY + lineHeight * 4);
+
+    // Draw position number (top right corner)
+    doc.setFontSize(8);
+    doc.text(`${i} of ${totalLabels}`, x + labelWidth - 8, y + 4, { align: 'right' });
 
     // Move to next position
     position++;

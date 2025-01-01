@@ -1,8 +1,8 @@
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { QRCode } from "react-qr-code";
+import { QRCodeSection } from "./form/QRCodeSection";
+import { LanguageSection } from "./form/LanguageSection";
 
 interface LabelFormInputsProps {
   totalAligners: string;
@@ -88,6 +88,7 @@ export const LabelFormInputs = ({
 
   return (
     <div className="space-y-4 pt-4">
+      {/* Title Input */}
       <div>
         <Label htmlFor="title">📝 Title</Label>
         <Input
@@ -100,6 +101,7 @@ export const LabelFormInputs = ({
         />
       </div>
 
+      {/* Number Groups and Aligners */}
       <div className="grid grid-cols-2 gap-4">
         <div>
           <Label htmlFor="numberOfGroups">👥 Number of Groups</Label>
@@ -125,6 +127,7 @@ export const LabelFormInputs = ({
         </div>
       </div>
 
+      {/* Size Selection */}
       <div>
         <Label htmlFor="size">📏 Label Size</Label>
         <Select value={selectedSize} onValueChange={onSizeChange}>
@@ -141,42 +144,19 @@ export const LabelFormInputs = ({
         </Select>
       </div>
 
-      <div>
-        <Label htmlFor="language">🌐 Language</Label>
-        <Select value={selectedLanguage} onValueChange={onLanguageChange}>
-          <SelectTrigger className="border-black bg-[#FFE4E1]">
-            <SelectValue placeholder="Select language" />
-          </SelectTrigger>
-          <SelectContent>
-            {languages.map((lang) => (
-              <SelectItem key={lang.id} value={lang.id}>
-                {lang.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      {/* Language Selection */}
+      <LanguageSection
+        selectedLanguage={selectedLanguage}
+        onLanguageChange={onLanguageChange}
+      />
 
-      <div>
-        <Label htmlFor="qrText">📱 QR Text (one per line)</Label>
-        <Textarea
-          id="qrText"
-          value={qrText}
-          onChange={(e) => onQRTextChange(e.target.value)}
-          placeholder="Enter QR text (one per line)"
-          className="border-black bg-[#FFE4E1] min-h-[100px]"
-        />
-        <div className="mt-2 grid grid-cols-2 gap-2">
-          {qrText.split('\n')
-            .filter(text => text.trim() !== '')
-            .map((text, index) => (
-              <div key={index} className="bg-white p-2 rounded">
-                <QRCode value={text.trim()} size={100} />
-              </div>
-            ))}
-        </div>
-      </div>
+      {/* QR Code Section */}
+      <QRCodeSection
+        qrText={qrText}
+        onQRTextChange={onQRTextChange}
+      />
 
+      {/* Date and Frequency Controls */}
       <div>
         <Label htmlFor="startDate">Start Date</Label>
         <Input
@@ -187,6 +167,7 @@ export const LabelFormInputs = ({
           className="border-black bg-[#FFE4E1]"
         />
       </div>
+
       <div>
         <Label htmlFor="changeFrequency">Change Frequency</Label>
         <Select value={changeFrequency} onValueChange={onChangeFrequencyChange}>

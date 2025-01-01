@@ -23,7 +23,7 @@ export const generateLabelsPDF = async (
   getChangeDate: (start: Date, frequency: string, alignerNumber: number) => Date,
   startingPosition: number = 1,
   options: PDFOptions
-) => {
+): Promise<jsPDF> => {
   const size = SIZES[options.selectedSize as keyof typeof SIZES];
   
   const doc = new jsPDF({

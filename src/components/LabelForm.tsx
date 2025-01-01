@@ -46,12 +46,12 @@ export const LabelForm = () => {
     return addWeeks(startDate, weeks);
   };
 
-  const handleDownloadPDF = () => {
+  const handleDownloadPDF = async () => {
     try {
       const parsedStartDate = parseISO(startDate);
       parsedStartDate.setHours(0, 0, 0, 0);
       
-      const doc = generateLabelsPDF(
+      const doc = await generateLabelsPDF(
         parseInt(totalAligners),
         parsedStartDate,
         changeFrequency,

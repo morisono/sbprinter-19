@@ -12,7 +12,7 @@ import { Download } from "lucide-react";
 
 export const LabelForm = () => {
   const today = new Date();
-  today.setHours(0, 0, 0, 0); // Reset time to midnight
+  today.setHours(0, 0, 0, 0);
   const formattedToday = format(today, "yyyy-MM-dd");
   
   const [totalAligners, setTotalAligners] = useState("12");
@@ -22,6 +22,11 @@ export const LabelForm = () => {
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [patientName, setPatientName] = useState("");
   const [startingPosition, setStartingPosition] = useState(1);
+  const [title, setTitle] = useState("");
+  const [numberOfGroups, setNumberOfGroups] = useState("1");
+  const [selectedSize, setSelectedSize] = useState("labelA");
+  const [selectedLanguage, setSelectedLanguage] = useState("ja-JP");
+  const [qrText, setQRText] = useState("");
   const { toast } = useToast();
 
   const getChangeDate = (start: Date | string, frequency: string, alignerNumber: number) => {
@@ -29,10 +34,10 @@ export const LabelForm = () => {
     
     if (typeof start === 'string') {
       startDate = parseISO(start);
-      startDate.setHours(0, 0, 0, 0); // Reset time to midnight
+      startDate.setHours(0, 0, 0, 0);
     } else {
       startDate = start;
-      startDate.setHours(0, 0, 0, 0); // Reset time to midnight
+      startDate.setHours(0, 0, 0, 0);
     }
     
     const weeks = frequency === "weekly" ? alignerNumber - 1 : 
@@ -44,15 +49,23 @@ export const LabelForm = () => {
   const handleDownloadPDF = () => {
     try {
       const parsedStartDate = parseISO(startDate);
-      parsedStartDate.setHours(0, 0, 0, 0); // Reset time to midnight
+      parsedStartDate.setHours(0, 0, 0, 0);
       
       const doc = generateLabelsPDF(
         parseInt(totalAligners),
         parsedStartDate,
         changeFrequency,
         getChangeDate,
-        startingPosition
+        startingPosition,
+        {
+          title,
+          numberOfGroups: parseInt(numberOfGroups),
+          selectedSize,
+          selectedLanguage,
+          qrText: qrText.split('\n').filter(text => text.trim() !== '')
+        }
       );
+
       const currentDate = format(new Date(), 'yyyyMMdd');
       const fileName = patientName.trim() 
         ? `Aligner_Labels_${currentDate}_${patientName.trim()}.pdf`
@@ -86,11 +99,21 @@ export const LabelForm = () => {
               changeFrequency={changeFrequency}
               patientName={patientName}
               startingPosition={startingPosition}
+              title={title}
+              numberOfGroups={numberOfGroups}
+              selectedSize={selectedSize}
+              selectedLanguage={selectedLanguage}
+              qrText={qrText}
               onTotalAlignersChange={setTotalAligners}
               onStartDateChange={setStartDate}
               onChangeFrequencyChange={setChangeFrequency}
               onPatientNameChange={setPatientName}
               onStartingPositionChange={setStartingPosition}
+              onTitleChange={setTitle}
+              onNumberOfGroupsChange={setNumberOfGroups}
+              onSizeChange={setSelectedSize}
+              onLanguageChange={setSelectedLanguage}
+              onQRTextChange={setQRText}
             />
             
             <div className="flex flex-col items-center justify-center">
@@ -100,6 +123,9 @@ export const LabelForm = () => {
                 currentPreview={currentPreview}
                 totalAligners={totalAligners}
                 getChangeDate={getChangeDate}
+                title={title}
+                numberOfGroups={numberOfGroups}
+                selectedLanguage={selectedLanguage}
               />
               
               <PreviewControls

@@ -1,35 +1,55 @@
 import jsPDF from 'jspdf';
 import { format } from 'date-fns';
+import QRCode from 'qrcode';
 
-export const generateLabelsPDF = (
+interface PDFOptions {
+  title: string;
+  numberOfGroups: number;
+  selectedSize: string;
+  selectedLanguage: string;
+  qrText: string[];
+}
+
+const SIZES = {
+  labelA: { width: 48, height: 24, cols: 5, rows: 7, orientation: 'landscape' },
+  labelB: { width: 52.5, height: 29.7, cols: 4, rows: 10, orientation: 'portrait' },
+  card: { width: 85.6, height: 54, cols: 2, rows: 5, orientation: 'portrait' }
+};
+
+export const generateLabelsPDF = async (
   totalLabels: number,
   startDate: Date,
   changeFrequency: string,
   getChangeDate: (start: Date, frequency: string, alignerNumber: number) => Date,
-  startingPosition: number = 1
+  startingPosition: number = 1,
+  options: PDFOptions
 ) => {
+  const size = SIZES[options.selectedSize as keyof typeof SIZES];
+  
   const doc = new jsPDF({
-    orientation: 'landscape',
+    orientation: size.orientation as 'portrait' | 'landscape',
     unit: 'mm',
     format: 'a4'
   });
 
-  // A4 dimensions in mm (landscape)
-  const pageWidth = 297;
-  const pageHeight = 210;
+  // Load the appropriate font based on language
+  if (options.selectedLanguage === 'ja-JP') {
+    doc.addFont('NotoSansCJKjp-Regular.ttf', 'Noto Sans CJK JP', 'normal');
+    doc.setFont('Noto Sans CJK JP');
+  }
 
-  // Label dimensions (48x24 mm as specified)
-  const labelWidth = 48;
-  const labelHeight = 24;
+  // A4 dimensions
+  const pageWidth = size.orientation === 'landscape' ? 297 : 210;
+  const pageHeight = size.orientation === 'landscape' ? 210 : 297;
 
   // Grid configuration
-  const labelsPerRow = 5;
-  const labelsPerColumn = 7;
+  const labelsPerRow = size.cols;
+  const labelsPerColumn = size.rows;
   const labelsPerPage = labelsPerRow * labelsPerColumn;
 
   // Calculate margins to center the grid on the page
-  const totalWidthNeeded = labelsPerRow * labelWidth;
-  const totalHeightNeeded = labelsPerColumn * labelHeight;
+  const totalWidthNeeded = labelsPerRow * size.width;
+  const totalHeightNeeded = labelsPerColumn * size.height;
   const horizontalMargin = (pageWidth - totalWidthNeeded) / 2;
   const verticalMargin = (pageHeight - totalHeightNeeded) / 2;
 
@@ -48,6 +68,11 @@ export const generateLabelsPDF = (
   position = position % labelsPerPage;
 
   for (let i = 1; i <= totalLabels; i++) {
+    // Calculate group numbers
+    const groupNumber = Math.ceil(i / (totalLabels / options.numberOfGroups));
+    const itemsPerGroup = Math.ceil(totalLabels / options.numberOfGroups);
+    const itemInGroup = ((i - 1) % itemsPerGroup) + 1;
+
     // Calculate current row and column within the current page
     let row = Math.floor(position / labelsPerRow);
     let col = position % labelsPerRow;
@@ -61,44 +86,44 @@ export const generateLabelsPDF = (
     }
 
     // Calculate x and y coordinates for the current label
-    const x = horizontalMargin + (col * labelWidth);
-    const y = verticalMargin + (row * labelHeight);
+    const x = horizontalMargin + (col * size.width);
+    const y = verticalMargin + (row * size.height);
 
     const changeDate = getChangeDate(startDate, changeFrequency, i);
 
     // Draw label border
-    doc.rect(x, y, labelWidth, labelHeight);
+    doc.rect(x, y, size.width, size.height);
 
     // Set font configurations
-    doc.setFont('helvetica');
     doc.setFontSize(8);
 
-    // Draw label content
-    const textX = x + labelWidth/2;
-    const baseY = y + 6;
-    const lineHeight = 4;
-
-    // Draw text content
-    doc.text('用法1日', x + 4, baseY);
-    doc.text('回', x + labelWidth/2, baseY);
-    doc.text('日分', x + labelWidth - 8, baseY);
-
-    doc.text('食後・後・間', x + 4, baseY + lineHeight);
-    doc.text('時間毎服用', x + labelWidth - 12, baseY + lineHeight);
+    // Draw title
+    doc.text(options.title || 'SMILEBAR', x + size.width/2, y + 4, { align: 'center' });
 
     // Draw date
-    doc.text(format(changeDate, 'yyyy'), x + 4, baseY + lineHeight * 2);
-    doc.text(format(changeDate, 'MM'), x + labelWidth/2 - 8, baseY + lineHeight * 2);
-    doc.text(format(changeDate, 'dd'), x + labelWidth - 12, baseY + lineHeight * 2);
+    doc.text(format(changeDate, 'yyyy/MM/dd'), x + size.width/2, y + 8, { align: 'center' });
 
-    // Draw warning text (smaller font)
-    doc.setFontSize(6);
-    doc.text('※小児の手のとどかない、', x + 4, baseY + lineHeight * 3);
-    doc.text('日除又は冷蔵庫に保管して下さい', x + 4, baseY + lineHeight * 4);
+    // Draw position number
+    const positionText = options.numberOfGroups === 1
+      ? `${i} of ${totalLabels}`
+      : `${groupNumber}.${itemInGroup} of ${options.numberOfGroups}.${itemsPerGroup}`;
+    doc.text(positionText, x + size.width/2, y + 12, { align: 'center' });
 
-    // Draw position number (top right corner)
-    doc.setFontSize(8);
-    doc.text(`${i} of ${totalLabels}`, x + labelWidth - 8, y + 4, { align: 'right' });
+    // Add QR code if text is available
+    if (options.qrText[i - 1]) {
+      const qrDataUrl = await QRCode.toDataURL(options.qrText[i - 1], {
+        width: size.height * 0.8,
+        margin: 0
+      });
+      doc.addImage(
+        qrDataUrl,
+        'PNG',
+        x + size.width - (size.height * 0.9),
+        y + (size.height * 0.1),
+        size.height * 0.8,
+        size.height * 0.8
+      );
+    }
 
     // Move to next position
     position++;

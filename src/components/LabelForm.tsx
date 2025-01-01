@@ -8,7 +8,9 @@ import { PreviewControls } from "./label/PreviewControls";
 import { LabelFormInputs } from "./label/LabelFormInputs";
 import { HelpSection } from "./label/HelpSection";
 import { generateLabelsPDF } from "@/utils/pdfUtils";
-import { Download } from "lucide-react";
+import { generatePNGsAndZip } from "@/utils/imageUtils";
+import { Download, Image } from "lucide-react";
+import { ImageUploader } from "./label/form/ImageUploader";
 
 export const LabelForm = () => {
   const today = new Date();
@@ -28,6 +30,7 @@ export const LabelForm = () => {
   const [selectedLanguage, setSelectedLanguage] = useState("ja-JP");
   const [qrText, setQRText] = useState("");
   const { toast } = useToast();
+  const [uploadedImages, setUploadedImages] = useState<File[]>([]);
 
   const getChangeDate = (start: Date | string, frequency: string, alignerNumber: number) => {
     let startDate: Date;
@@ -80,6 +83,37 @@ export const LabelForm = () => {
     }
   };
 
+  const handleImagesUploaded = (images: File[]) => {
+    setUploadedImages(images);
+  };
+
+  const handleDownloadPNGs = async () => {
+    try {
+      const parsedStartDate = parseISO(startDate);
+      parsedStartDate.setHours(0, 0, 0, 0);
+      
+      await generatePNGsAndZip(
+        parseInt(totalAligners),
+        parsedStartDate,
+        changeFrequency,
+        getChangeDate,
+        {
+          title,
+          numberOfGroups: parseInt(numberOfGroups),
+          selectedSize,
+          selectedLanguage,
+          qrText: qrText.split('\n').filter(text => text.trim() !== '')
+        }
+      );
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "PNG Generation Failed",
+        description: "There was an error generating your PNGs. Please try again.",
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen p-4 max-w-4xl mx-auto flex flex-col items-center justify-center">
       <div className="w-full text-center mb-8">
@@ -93,28 +127,31 @@ export const LabelForm = () => {
       <Card className="mb-4 bg-background shadow-sm border border-black w-full">
         <CardContent className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <LabelFormInputs
-              totalAligners={totalAligners}
-              startDate={startDate}
-              changeFrequency={changeFrequency}
-              patientName={patientName}
-              startingPosition={startingPosition}
-              title={title}
-              numberOfGroups={numberOfGroups}
-              selectedSize={selectedSize}
-              selectedLanguage={selectedLanguage}
-              qrText={qrText}
-              onTotalAlignersChange={setTotalAligners}
-              onStartDateChange={setStartDate}
-              onChangeFrequencyChange={setChangeFrequency}
-              onPatientNameChange={setPatientName}
-              onStartingPositionChange={setStartingPosition}
-              onTitleChange={setTitle}
-              onNumberOfGroupsChange={setNumberOfGroups}
-              onSizeChange={setSelectedSize}
-              onLanguageChange={setSelectedLanguage}
-              onQRTextChange={setQRText}
-            />
+            <div>
+              <LabelFormInputs
+                totalAligners={totalAligners}
+                startDate={startDate}
+                changeFrequency={changeFrequency}
+                patientName={patientName}
+                startingPosition={startingPosition}
+                title={title}
+                numberOfGroups={numberOfGroups}
+                selectedSize={selectedSize}
+                selectedLanguage={selectedLanguage}
+                qrText={qrText}
+                onTotalAlignersChange={setTotalAligners}
+                onStartDateChange={setStartDate}
+                onChangeFrequencyChange={setChangeFrequency}
+                onPatientNameChange={setPatientName}
+                onStartingPositionChange={setStartingPosition}
+                onTitleChange={setTitle}
+                onNumberOfGroupsChange={setNumberOfGroups}
+                onSizeChange={setSelectedSize}
+                onLanguageChange={setSelectedLanguage}
+                onQRTextChange={setQRText}
+              />
+              <ImageUploader onImagesUploaded={handleImagesUploaded} />
+            </div>
             
             <div className="flex flex-col items-center justify-center">
               <LabelPreview
@@ -126,6 +163,7 @@ export const LabelForm = () => {
                 title={title}
                 numberOfGroups={numberOfGroups}
                 selectedLanguage={selectedLanguage}
+                uploadedImages={uploadedImages}
               />
               
               <PreviewControls
@@ -137,7 +175,7 @@ export const LabelForm = () => {
             </div>
           </div>
           
-          <div className="flex justify-center w-full">
+          <div className="flex justify-center gap-4 w-full">
             <Button
               className="w-full md:w-auto px-8 border-black bg-white text-black hover:bg-gray-100 flex items-center gap-2"
               onClick={handleDownloadPDF}
@@ -145,6 +183,15 @@ export const LabelForm = () => {
             >
               <Download className="w-4 h-4" />
               Download PDF
+            </Button>
+            
+            <Button
+              className="w-full md:w-auto px-8 border-black bg-white text-black hover:bg-gray-100 flex items-center gap-2"
+              onClick={handleDownloadPNGs}
+              disabled={!totalAligners || !startDate}
+            >
+              <Image className="w-4 h-4" />
+              Download PNGs
             </Button>
           </div>
         </CardContent>

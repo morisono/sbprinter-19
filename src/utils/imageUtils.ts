@@ -27,7 +27,6 @@ export const generatePNGsAndZip = async (
     doc.setFont('Noto Sans JP');
   }
 
-  // Calculate items per group
   const itemsPerGroup = Math.ceil(totalLabels / options.numberOfGroups);
 
   for (let i = 1; i <= totalLabels; i++) {

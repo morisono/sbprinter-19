@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import { useCallback, useState } from "react";
 
 interface LabelPreviewProps {
   startDate: string;
@@ -9,6 +10,7 @@ interface LabelPreviewProps {
   numberOfGroups: string;
   selectedLanguage: string;
   getChangeDate: (start: Date | string, frequency: string, alignerNumber: number) => Date;
+  onImagesUploaded: (images: File[]) => void;
 }
 
 export const LabelPreview = ({ 
@@ -19,14 +21,56 @@ export const LabelPreview = ({
   title,
   numberOfGroups,
   selectedLanguage,
-  getChangeDate
+  getChangeDate,
+  onImagesUploaded
 }: LabelPreviewProps) => {
+  const [isDragging, setIsDragging] = useState(false);
   const groupNumber = Math.ceil(currentPreview / (parseInt(totalAligners) / parseInt(numberOfGroups || "1")));
   const itemsPerGroup = Math.ceil(parseInt(totalAligners) / parseInt(numberOfGroups || "1"));
   const itemInGroup = ((currentPreview - 1) % itemsPerGroup) + 1;
 
+  const handleDrag = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }, []);
+
+  const handleDragIn = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  }, []);
+
+  const handleDragOut = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const files = Array.from(e.dataTransfer.files).filter(file => 
+      file.type.startsWith('image/')
+    );
+    
+    if (files.length > 0) {
+      onImagesUploaded(files);
+    }
+  }, [onImagesUploaded]);
+
   return (
-    <div className={`label-preview w-[1.5in] h-[1.5in] bg-white border-2 border-black border-dotted flex flex-col items-center justify-center my-4 font-${selectedLanguage === 'ja-JP' ? 'noto-sans-jp' : 'inter'}`}>
+    <div 
+      className={`label-preview w-[1.5in] h-[1.5in] bg-white border-2 
+        ${isDragging ? 'border-primary border-solid' : 'border-black border-dotted'} 
+        flex flex-col items-center justify-center my-4 
+        font-${selectedLanguage === 'ja-JP' ? 'noto-sans-jp' : 'inter'}`}
+      onDragEnter={handleDragIn}
+      onDragLeave={handleDragOut}
+      onDragOver={handleDrag}
+      onDrop={handleDrop}
+    >
       <div className="flex flex-col items-center justify-center h-full space-y-1 py-2">
         <div className="text-sm font-bold uppercase tracking-wide">
           {title || "SMILEBAR"}

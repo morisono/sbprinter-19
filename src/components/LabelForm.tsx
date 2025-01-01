@@ -10,7 +10,6 @@ import { HelpSection } from "./label/HelpSection";
 import { generateLabelsPDF } from "@/utils/pdfUtils";
 import { generatePNGsAndZip } from "@/utils/imageUtils";
 import { Download, Image } from "lucide-react";
-import { ImageUploader } from "./label/form/ImageUploader";
 
 export const LabelForm = () => {
   const today = new Date();
@@ -150,7 +149,6 @@ export const LabelForm = () => {
                 onLanguageChange={setSelectedLanguage}
                 onQRTextChange={setQRText}
               />
-              <ImageUploader onImagesUploaded={handleImagesUploaded} />
             </div>
             
             <div className="flex flex-col items-center justify-center">
@@ -163,7 +161,7 @@ export const LabelForm = () => {
                 title={title}
                 numberOfGroups={numberOfGroups}
                 selectedLanguage={selectedLanguage}
-                uploadedImages={uploadedImages}
+                onImagesUploaded={handleImagesUploaded}
               />
               
               <PreviewControls

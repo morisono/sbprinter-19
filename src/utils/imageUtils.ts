@@ -27,28 +27,26 @@ export const generatePNGsAndZip = async (
     doc.setFont('Noto Sans JP');
   }
 
-  const itemsPerGroup = Math.ceil(totalLabels / options.numberOfGroups);
-
-  for (let i = 1; i <= totalLabels; i++) {
-    const groupNumber = Math.ceil(i / itemsPerGroup);
-    const itemInGroup = ((i - 1) % itemsPerGroup) + 1;
-    
-    // Generate individual label
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    
-    if (!ctx) continue;
-    
-    // Set canvas size (48x24mm at 300dpi)
-    canvas.width = 567;
-    canvas.height = 283;
-    
-    // Convert to PNG
-    const pngData = canvas.toDataURL('image/png');
-    const pngName = `label_${groupNumber}.${itemInGroup}.png`;
-    
-    // Add to ZIP
-    zip.file(pngName, pngData.split('base64,')[1], { base64: true });
+  // Generate labels for each group, repeating the aligner sequence
+  for (let group = 1; group <= options.numberOfGroups; group++) {
+    for (let aligner = 1; aligner <= totalLabels; aligner++) {
+      // Generate individual label
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      
+      if (!ctx) continue;
+      
+      // Set canvas size (48x24mm at 300dpi)
+      canvas.width = 567;
+      canvas.height = 283;
+      
+      // Convert to PNG
+      const pngData = canvas.toDataURL('image/png');
+      const pngName = `label_${group}.${aligner}.png`;
+      
+      // Add to ZIP
+      zip.file(pngName, pngData.split('base64,')[1], { base64: true });
+    }
   }
 
   // Generate and download ZIP

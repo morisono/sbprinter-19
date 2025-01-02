@@ -27,8 +27,9 @@ export const generatePNGsAndZip = async (
     doc.setFont('Noto Sans JP');
   }
 
-  // Generate labels for each group, repeating the aligner sequence
+  // Generate labels for each group, repeating the full aligner sequence
   for (let group = 1; group <= options.numberOfGroups; group++) {
+    // For each group, generate all aligners from 1 to totalLabels
     for (let aligner = 1; aligner <= totalLabels; aligner++) {
       // Generate individual label
       const canvas = document.createElement('canvas');
@@ -50,6 +51,9 @@ export const generatePNGsAndZip = async (
       
       // Add to ZIP
       zip.file(pngName, pngData.split('base64,')[1], { base64: true });
+
+      // Log for debugging
+      console.log(`Generated label: ${pngName}`);
     }
   }
 

@@ -25,9 +25,11 @@ export const LabelPreview = ({
   onImagesUploaded
 }: LabelPreviewProps) => {
   const [isDragging, setIsDragging] = useState(false);
-  const groupNumber = Math.ceil(currentPreview / (parseInt(totalAligners) / parseInt(numberOfGroups || "1")));
-  const itemsPerGroup = Math.ceil(parseInt(totalAligners) / parseInt(numberOfGroups || "1"));
-  const itemInGroup = ((currentPreview - 1) % itemsPerGroup) + 1;
+  
+  // Calculate the current group and item number
+  const totalAlignersPerGroup = parseInt(totalAligners);
+  const currentGroup = Math.ceil(currentPreview / totalAlignersPerGroup);
+  const itemInGroup = ((currentPreview - 1) % totalAlignersPerGroup) + 1;
 
   const handleDrag = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -86,7 +88,7 @@ export const LabelPreview = ({
         <div className="text-lg font-semibold">
           {numberOfGroups === "1" 
             ? `${currentPreview} of ${totalAligners}` 
-            : `${groupNumber}.${itemInGroup} of ${numberOfGroups}.${itemsPerGroup}`}
+            : `${currentGroup}.${itemInGroup} of ${numberOfGroups}.${totalAlignersPerGroup}`}
         </div>
       </div>
     </div>

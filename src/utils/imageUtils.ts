@@ -40,6 +40,10 @@ export const generatePNGsAndZip = async (
       canvas.width = 567;
       canvas.height = 283;
       
+      // Draw label content
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
       // Convert to PNG
       const pngData = canvas.toDataURL('image/png');
       const pngName = `label_${group}.${aligner}.png`;
